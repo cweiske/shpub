@@ -58,7 +58,7 @@ class Config
             }
             $str .= '[' . $hostName . "]\n";
             foreach ($host as $hostProp => $hostVal) {
-                if ($hostProp == 'cache') {
+                if ($hostProp == 'endpoints') {
                     continue;
                 }
                 if ($hostVal == '') {

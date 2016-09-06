@@ -25,11 +25,11 @@ class Config_Host
     public $token;
 
     /**
-     * Host information cache
+     * Host information
      *
-     * @var Config_HostCache
+     * @var Config_HostEndpoints
      */
-    public $cache;
+    public $endpoints;
 
     /**
      * If this host is the default one

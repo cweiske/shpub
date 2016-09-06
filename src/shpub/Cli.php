@@ -23,7 +23,8 @@ class Cli
                 $cmd->run(
                     $res->command->args['server'],
                     $res->command->args['user'],
-                    $res->command->args['key']
+                    $res->command->args['key'],
+                    $res->command->options['force']
                 );
                 break;
             case 'like':
@@ -109,6 +110,16 @@ class Cli
         );
 
         $cmd = $optParser->addCommand('connect');
+        $cmd->addOption(
+            'force',
+            array(
+                'short_name'  => '-f',
+                'long_name'   => '--force-update',
+                'description' => 'Force token update if token already available',
+                'action'      => 'StoreTrue',
+                'default'     => false,
+            )
+        );
         $cmd->addArgument(
             'server',
             [

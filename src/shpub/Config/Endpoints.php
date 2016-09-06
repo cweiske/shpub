@@ -1,7 +1,7 @@
 <?php
 namespace shpub;
 
-class Config_HostCache
+class Config_Endpoints
 {
     /**
      * Micropub endpoint URL
@@ -29,6 +29,13 @@ class Config_HostCache
      *
      * @var string
      */
-    public $auth;
+    public $authorization;
+
+    public function incomplete()
+    {
+        return $this->authorization === null
+            || $this->token === null
+            || $this->micropub === null;
+    }
 }
 ?>
