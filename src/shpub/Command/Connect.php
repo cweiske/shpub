@@ -71,6 +71,11 @@ class Command_Connect
         $host, $userUrl, $code, $redirect_uri, $state
     ) {
         $req = new \HTTP_Request2($host->endpoints->token, 'POST');
+        if (version_compare(PHP_VERSION, '5.6.0', '<')) {
+            //correct ssl validation on php 5.5 is a pain, so disable
+            $req->setConfig('ssl_verify_host', false);
+            $req->setConfig('ssl_verify_peer', false);
+        }
         $req->setHeader('Content-Type: application/x-www-form-urlencoded');
         $req->setBody(
             http_build_query(
@@ -136,6 +141,11 @@ class Command_Connect
     protected function verifyAuthCode($host, $code, $state, $redirect_uri, $me)
     {
         $req = new \HTTP_Request2($host->endpoints->authorization, 'POST');
+        if (version_compare(PHP_VERSION, '5.6.0', '<')) {
+            //correct ssl validation on php 5.5 is a pain, so disable
+            $req->setConfig('ssl_verify_host', false);
+            $req->setConfig('ssl_verify_peer', false);
+        }
         $req->setHeader('Content-Type: application/x-www-form-urlencoded');
         $req->setBody(
             http_build_query(

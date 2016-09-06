@@ -28,6 +28,11 @@ class Command_Like
         );
 
         $req = new \HTTP_Request2($this->host->endpoints->micropub, 'POST');
+        if (version_compare(PHP_VERSION, '5.6.0', '<')) {
+            //correct ssl validation on php 5.5 is a pain, so disable
+            $req->setConfig('ssl_verify_host', false);
+            $req->setConfig('ssl_verify_peer', false);
+        }
         $req->setHeader('Content-type', 'application/x-www-form-urlencoded');
         $req->setHeader('Authorization', 'Bearer ' . $this->host->token);
         $req->setBody($body);
