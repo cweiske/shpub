@@ -1,7 +1,7 @@
 <?php
 namespace shpub;
 
-class Command_Like
+class Command_Reply
 {
     /**
      * @var Config_Host
@@ -13,7 +13,7 @@ class Command_Like
         $this->host = $host;
     }
 
-    public function run($url)
+    public function run($url, $text)
     {
         $url = Validator::url($url, 'url');
         if ($url === false) {
@@ -22,15 +22,16 @@ class Command_Like
 
         $body = http_build_query(
             [
-                'h'       => 'entry',
-                'like-of' => $url,
+                'h'           => 'entry',
+                'content'     => $text,
+                'in-reply-to' => $url,
             ]
         );
 
         $req = new Request($this->host);
         $res = $req->send($body);
         $postUrl = $res->getHeader('Location');
-        echo "Like created at server\n";
+        echo "Reply created at server\n";
         echo $postUrl . "\n";
     }
 }

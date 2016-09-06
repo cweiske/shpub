@@ -27,15 +27,27 @@ class Cli
                     $res->command->options['force']
                 );
                 break;
+
+            case 'server':
+                $cmd = new Command_Server($this->cfg);
+                $cmd->run($res->command->options['verbose']);
+                break;
+
             case 'like':
                 $this->requireValidHost();
                 $cmd = new Command_Like($this->cfg->host);
                 $cmd->run($res->command->args['url']);
                 break;
-            case 'server':
-                $cmd = new Command_Server($this->cfg);
-                $cmd->run($res->command->options['verbose']);
+
+            case 'reply':
+                $this->requireValidHost();
+                $cmd = new Command_Reply($this->cfg->host);
+                $cmd->run(
+                    $res->command->args['url'],
+                    implode(' ', $res->command->args['text'])
+                );
                 break;
+
             default:
                 var_dump($this->cfg->host, $res);
                 Log::err('FIXME');
@@ -171,6 +183,7 @@ class Cli
             'text',
             [
                 'optional'    => false,
+                'multiple'    => true,
                 'description' => 'Reply text',
             ]
         );
