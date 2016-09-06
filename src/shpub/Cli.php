@@ -181,6 +181,8 @@ class Cli
                 'Server data incomplete. "shpub connect" first.'
             );
         }
+
+        $this->cfg->host->loadEndpoints();
     }
 }
 ?>
