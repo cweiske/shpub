@@ -67,7 +67,14 @@ class Config
                 $str .= $hostProp . '=' . $hostVal . "\n";
             }
         }
-        file_put_contents($this->getConfigFilePath(), $str);
+        $cfgFilePath = $this->getConfigFilePath();
+        $cfgDir = dirname($cfgFilePath);
+        if (!is_dir($cfgDir)) {
+            mkdir($cfgDir);
+        }
+        file_put_contents($cfgFilePath, $str);
+        //contains sensitive data; nobody else may read that
+        chmod($cfgFilePath, 0600);
     }
 
     public function getDefaultHost()
