@@ -37,5 +37,20 @@ class Config_Host
      * @var boolean
      */
     public $default;
+
+    public function __construct()
+    {
+        $this->endpoints = new Config_Endpoints();
+    }
+
+    public function loadEndpoints()
+    {
+        $this->endpoints = new Config_Endpoints();
+        $this->endpoints->load($this->server);
+        if ($this->endpoints->incomplete()) {
+            $this->endpoints->discover($this->server);
+            $this->endpoints->save($this->server);
+        }
+    }
 }
 ?>

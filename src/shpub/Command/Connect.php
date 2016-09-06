@@ -17,9 +17,13 @@ class Command_Connect
     public function run($server, $user, $newKey, $force)
     {
         $host = $this->getHost($newKey != '' ? $newKey : $server, $force);
+        if ($host === null) {
+            //already taken
+            return;
+        }
         if ($host->endpoints->incomplete()) {
             $host->server = $server;
-            $this->discoverEndpoints($server, $host->endpoints);
+            $host->loadEndpoints();
         }
 
         list($redirect_uri, $socketStr) = $this->getHttpServerData();
@@ -116,48 +120,7 @@ class Command_Connect
                 return;
             }
         }
-        if ($host->endpoints === null) {
-            $host->endpoints = new Config_Endpoints();
-        }
         return $host;
-    }
-
-    function discoverEndpoints($url, $cfg)
-    {
-        //TODO: discovery via link headers
-        $sx = simplexml_load_file($url);
-        if ($sx === false) {
-            Log::err('Error loading URL: ' . $url);
-            exit(1);
-        }
-        $sx->registerXPathNamespace('h', 'http://www.w3.org/1999/xhtml');
-
-        $auths = $sx->xpath(
-            '/h:html/h:head/h:link[@rel="authorization_endpoint" and @href]'
-        );
-        if (!count($auths)) {
-            Log::err('No authorization endpoint found');
-            exit(1);
-        }
-        $cfg->authorization = (string) $auths[0]['href'];
-
-        $tokens = $sx->xpath(
-            '/h:html/h:head/h:link[@rel="token_endpoint" and @href]'
-        );
-        if (!count($tokens)) {
-            Log::err('No token endpoint found');
-            exit(1);
-        }
-        $cfg->token = (string) $tokens[0]['href'];
-
-        $mps = $sx->xpath(
-            '/h:html/h:head/h:link[@rel="micropub" and @href]'
-        );
-        if (!count($mps)) {
-            Log::err('No micropub endpoint found');
-            exit(1);
-        }
-        $cfg->micropub = (string) $mps[0]['href'];
     }
 
     protected function getHttpServerData()

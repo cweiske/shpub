@@ -15,6 +15,7 @@ class Config
     protected function getConfigFilePath()
     {
         if (!isset($_SERVER['HOME'])) {
+            Log::err('Cannot determine home directory');
             return false;
         }
 
@@ -70,7 +71,7 @@ class Config
         $cfgFilePath = $this->getConfigFilePath();
         $cfgDir = dirname($cfgFilePath);
         if (!is_dir($cfgDir)) {
-            mkdir($cfgDir);
+            mkdir($cfgDir, 0700);
         }
         file_put_contents($cfgFilePath, $str);
         //contains sensitive data; nobody else may read that
