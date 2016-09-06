@@ -16,6 +16,14 @@ class Command_Connect
 
     public function run($server, $user, $newKey, $force)
     {
+        $server = Validator::url($server, 'server');
+        if ($user === null) {
+            //indieweb: homepage is your identity
+            $user = $server;
+        } else {
+            $user = Validator::url($user, 'user');
+        }
+
         $host = $this->getHost($newKey != '' ? $newKey : $server, $force);
         if ($host === null) {
             //already taken

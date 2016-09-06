@@ -146,7 +146,7 @@ class Cli
         $cmd->addArgument(
             'user',
             [
-                'optional'    => false,
+                'optional'    => true,
                 'description' => 'User URL',
             ]
         );
