@@ -16,8 +16,14 @@ class Validator
         }
 
         if (!isset($parts['host'])) {
-            Log::err('Invalid URL: No host in ' . $helpName);
-            return false;
+            if (count($parts) == 1 && isset($parts['path'])) {
+                //parse_url('example.org') puts 'example.org' in the path
+                // but this is common, so we fix it.
+                $url = 'http://' . $parts['path'];
+            } else {
+                Log::err('Invalid URL: No host in ' . $helpName);
+                return false;
+            }
         }
 
         return $url;
