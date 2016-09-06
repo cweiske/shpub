@@ -32,6 +32,10 @@ class Cli
                 $cmd = new Command_Like($this->cfg->host);
                 $cmd->run($res->command->args['url']);
                 break;
+            case 'server':
+                $cmd = new Command_Server($this->cfg);
+                $cmd->run($res->command->options['verbose']);
+                break;
             default:
                 var_dump($this->cfg->host, $res);
                 Log::err('FIXME');
@@ -140,6 +144,18 @@ class Cli
                 'optional'    => true,
                 'description' => 'Short name (key)',
             ]
+        );
+
+        $cmd = $optParser->addCommand('server');
+        $cmd->addOption(
+            'verbose',
+            array(
+                'short_name'  => '-v',
+                'long_name'   => '--verbose',
+                'description' => 'Show more server infos',
+                'action'      => 'StoreTrue',
+                'default'     => false,
+            )
         );
 
         //$cmd = $optParser->addCommand('post');
