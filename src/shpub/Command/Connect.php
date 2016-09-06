@@ -65,6 +65,7 @@ class Command_Connect
         }
         $this->cfg->hosts[$hostKey] = $host;
         $this->cfg->save();
+        echo "Server configuration $hostKey saved successfully.\n";
     }
 
     protected function fetchAccessToken(
@@ -130,9 +131,20 @@ class Command_Connect
 
     protected function getHttpServerData()
     {
-        //FIXME: get IP from SSH_CONNECTION
         $ip   = '127.0.0.1';
         $port = 12345;
+
+        if (isset($_SERVER['SSH_CONNECTION'])) {
+            $parts = explode(' ', $_SERVER['SSH_CONNECTION']);
+            if (count($parts) >= 3) {
+                $ip = $parts[2];
+            }
+        }
+        if (strpos($ip, ':') !== false) {
+            //ipv6
+            $ip = '[' . $ip . ']';
+        }
+
         $redirect_uri = 'http://' . $ip . ':' . $port . '/callback';
         $socketStr    = 'tcp://' . $ip . ':' . $port;
         return [$redirect_uri, $socketStr];
