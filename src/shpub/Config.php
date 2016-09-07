@@ -12,6 +12,8 @@ class Config
      */
     public $host;
 
+    public $debug = false;
+
     protected function getConfigFilePath()
     {
         if (!isset($_SERVER['HOME'])) {
@@ -113,6 +115,11 @@ class Config
             return $val;
         }
         return '"' . $val . '"';
+    }
+
+    public function setDebug($debug)
+    {
+        $this->debug = $debug;
     }
 }
 ?>

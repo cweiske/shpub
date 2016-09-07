@@ -4,13 +4,13 @@ namespace shpub;
 class Command_Reply
 {
     /**
-     * @var Config_Host
+     * @var Config
      */
-    protected $host;
+    protected $cfg;
 
-    public function __construct($host)
+    public function __construct($cfg)
     {
-        $this->host = $host;
+        $this->cfg = $cfg;
     }
 
     public function run($url, $text)
@@ -28,7 +28,7 @@ class Command_Reply
             ]
         );
 
-        $req = new Request($this->host);
+        $req = new Request($this->cfg->host, $this->cfg);
         $res = $req->send($body);
         $postUrl = $res->getHeader('Location');
         echo "Reply created at server\n";

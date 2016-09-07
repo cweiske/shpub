@@ -35,13 +35,13 @@ class Cli
 
             case 'like':
                 $this->requireValidHost();
-                $cmd = new Command_Like($this->cfg->host);
+                $cmd = new Command_Like($this->cfg);
                 $cmd->run($res->command->args['url']);
                 break;
 
             case 'reply':
                 $this->requireValidHost();
-                $cmd = new Command_Reply($this->cfg->host);
+                $cmd = new Command_Reply($this->cfg);
                 $cmd->run(
                     $res->command->args['url'],
                     implode(' ', $res->command->args['text'])
@@ -83,6 +83,7 @@ class Cli
             if ($opts['user'] !== null) {
                 $this->cfg->host->user = $opts['user'];
             }
+            $this->cfg->setDebug($opts['debug']);
 
             return $res;
         } catch (\Exception $exc) {
@@ -122,6 +123,16 @@ class Cli
                 'help_name'   => 'URL',
                 'action'      => 'StoreString',
                 'default'     => null,
+            )
+        );
+        $optParser->addOption(
+            'debug',
+            array(
+                'short_name'  => '-d',
+                'long_name'   => '--debug',
+                'description' => 'Verbose output',
+                'action'      => 'StoreTrue',
+                'default'     => false,
             )
         );
 
