@@ -98,6 +98,12 @@ class Command_Connect
             )
         );
         $res = $req->send();
+        if (intval($res->getStatus() / 100) !== 2) {
+            Log::err('Failed to fetch access token');
+            Log::err('Server responded with HTTP status code ' . $res->getStatus());
+            Log::err($res->getBody());
+            exit(2);
+        }
         if ($res->getHeader('content-type') != 'application/x-www-form-urlencoded') {
             Log::err('Wrong content type in auth verification response');
             exit(2);
