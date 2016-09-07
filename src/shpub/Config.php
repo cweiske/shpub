@@ -88,7 +88,7 @@ class Config
         }
         foreach ($this->hosts as $key => $host) {
             if ($host->default) {
-                return $host;
+                return $key;
             }
         }
         

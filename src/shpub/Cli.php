@@ -79,6 +79,11 @@ class Cli
                 } else {
                     $this->cfg->host = $this->cfg->hosts[$key];
                 }
+            } else {
+                $key = $this->cfg->getDefaultHost();
+                if ($key !== null) {
+                    $this->cfg->host = $this->cfg->hosts[$key];
+                }
             }
             if ($opts['user'] !== null) {
                 $this->cfg->host->user = $opts['user'];
