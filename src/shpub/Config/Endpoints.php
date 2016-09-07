@@ -41,39 +41,49 @@ class Config_Endpoints
     public function discover($server)
     {
         //TODO: discovery via link headers
-        $sx = simplexml_load_file($server);
+        $baseUrl = new \Net_URL2($server);
+
+        $doc = new \DOMDocument();
+        $doc->loadHTMLFile($server);
+        $sx = simplexml_import_dom($doc);
         if ($sx === false) {
             Log::err('Error loading URL: ' . $server);
             exit(1);
         }
-        $sx->registerXPathNamespace('h', 'http://www.w3.org/1999/xhtml');
+        //$sx->registerXPathNamespace('h', 'http://www.w3.org/1999/xhtml');
 
         $auths = $sx->xpath(
-            '/h:html/h:head/h:link[@rel="authorization_endpoint" and @href]'
+            '/html/head/link[@rel="authorization_endpoint" and @href]'
         );
         if (!count($auths)) {
-            Log::err('No authorization endpoint found');
+            Log::err('No authorization endpoint found at ' . $server);
             exit(1);
         }
-        $this->authorization = (string) $auths[0]['href'];
+        $this->authorization = (string) $baseUrl->resolve(
+            (string) $auths[0]['href']
+        );
 
         $tokens = $sx->xpath(
-            '/h:html/h:head/h:link[@rel="token_endpoint" and @href]'
+            '/html/head/link[@rel="token_endpoint" and @href]'
         );
         if (!count($tokens)) {
             Log::err('No token endpoint found');
             exit(1);
         }
-        $this->token = (string) $tokens[0]['href'];
+        $this->token = (string) $baseUrl->resolve(
+            (string) $tokens[0]['href']
+        );
 
         $mps = $sx->xpath(
-            '/h:html/h:head/h:link[@rel="micropub" and @href]'
+            '/html/head/link[@rel="micropub" and @href]'
         );
         if (!count($mps)) {
             Log::err('No micropub endpoint found');
             exit(1);
         }
-        $this->micropub = (string) $mps[0]['href'];
+        $this->micropub = (string) $baseUrl->resolve(
+            (string) $mps[0]['href']
+        );
     }
 
     public function load($server)
