@@ -47,7 +47,6 @@ class Command_Connect
         }
         $code    = $authParams['code'];
         $userUrl = $authParams['me'];
-        $this->verifyAuthCode($host, $code, $state, $redirect_uri, $userUrl);
 
         $accessToken = $this->fetchAccessToken(
             $host, $userUrl, $code, $redirect_uri, $state
@@ -162,39 +161,6 @@ class Command_Connect
         $redirect_uri = 'http://' . $ip . ':' . $port . '/callback';
         $socketStr    = 'tcp://' . $ip . ':' . $port;
         return [$redirect_uri, $socketStr];
-    }
-
-    protected function verifyAuthCode($host, $code, $state, $redirect_uri, $me)
-    {
-        $req = new \HTTP_Request2($host->endpoints->authorization, 'POST');
-        if (version_compare(PHP_VERSION, '5.6.0', '<')) {
-            //correct ssl validation on php 5.5 is a pain, so disable
-            $req->setConfig('ssl_verify_host', false);
-            $req->setConfig('ssl_verify_peer', false);
-        }
-        $req->setHeader('Content-Type: application/x-www-form-urlencoded');
-        $req->setBody(
-            http_build_query(
-                [
-                    'code'         => $code,
-                    'state'        => $state,
-                    'client_id'    => static::$client_id,
-                    'redirect_uri' => $redirect_uri,
-                ]
-            )
-        );
-        $res = $req->send();
-        if ($res->getHeader('content-type') != 'application/x-www-form-urlencoded') {
-            Log::err('Wrong content type in auth verification response');
-            exit(2);
-        }
-        parse_str($res->getBody(), $verifiedParams);
-        if (!isset($verifiedParams['me'])
-            || $verifiedParams['me'] !== $me
-        ) {
-            Log::err('Non-matching "me" values');
-            exit(2);
-        }
     }
 
     protected function startHttpServer($socketStr)
