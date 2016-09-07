@@ -65,7 +65,8 @@ class Config
                 if ($hostVal == '') {
                     continue;
                 }
-                $str .= $hostProp . '=' . $hostVal . "\n";
+                $str .= $hostProp
+                    . '=' . static::quoteIniValue($hostVal) . "\n";
             }
         }
         $cfgFilePath = $this->getConfigFilePath();
@@ -104,6 +105,14 @@ class Config
             }
         }
         return null;
+    }
+
+    public static function quoteIniValue($val)
+    {
+        if (strpos($val, '=') === false) {
+            return $val;
+        }
+        return '"' . $val . '"';
     }
 }
 ?>

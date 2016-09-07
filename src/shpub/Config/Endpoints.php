@@ -44,7 +44,7 @@ class Config_Endpoints
         $baseUrl = new \Net_URL2($server);
 
         $doc = new \DOMDocument();
-        $doc->loadHTMLFile($server);
+        @$doc->loadHTMLFile($server);
         $sx = simplexml_import_dom($doc);
         if ($sx === false) {
             Log::err('Error loading URL: ' . $server);
@@ -112,10 +112,11 @@ class Config_Endpoints
 
         file_put_contents(
             $file,
-            'micropub=' . $this->micropub . "\n"
-            . 'media=' . $this->media . "\n"
-            . 'token=' . $this->token . "\n"
-             . 'authorization=' . $this->authorization . "\n"
+            'micropub=' . Config::quoteIniValue($this->micropub) . "\n"
+            . 'media=' . Config::quoteIniValue($this->media) . "\n"
+            . 'token=' . Config::quoteIniValue($this->token) . "\n"
+            . 'authorization='
+            . Config::quoteIniValue($this->authorization) . "\n"
         );
     }
 
