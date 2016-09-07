@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project name="shpub" default="phar" basedir=".">
+
+ <property name="version"  value="0.0.1" />
+ <property name="pharfile" value="${phing.dir}/dist/${phing.project.name}-${version}.phar" />
+ <property name="libdir" value="${phing.dir}/lib"/>
+
+ <fileset id="fs.phar" dir="${phing.dir}">
+  <include name="bin/**"/>
+  <include name="lib/**"/>
+  <include name="src/**"/>
+
+  <include name="README.rst"/>
+
+  <exclude name="bin/shpub.php"/>
+ </fileset>
+
+
+ <typedef name="pearPackageFileSet" classname="phing.types.PearPackageFileSet" />
+
+ <target name="phar" depends="collectdeps"
+         description="Create zip file for release"
+ >
+  <!-- strip the shebang  -->
+  <copy file="${phing.dir}/bin/shpub.php" tofile="${phing.dir}/bin/phar-shpub.php">
+   <filterchain>
+    <striplinecomments>
+     <comment value="#" />
+    </striplinecomments>
+   </filterchain>
+  </copy>
+
+  <mkdir dir="${phing.dir}/dist"/>
+  <delete file="${pharfile}"/>
+  <pharpackage basedir="${phing.dir}"
+   destfile="${pharfile}"
+   stub="${phing.dir}/src/phar-stub.php"
+   alias="shpub.phar"
+  >
+   <fileset refid="fs.phar"/>
+  </pharpackage>
+
+  <exec executable="chmod" checkreturn="1">
+   <arg value="+x"/>
+   <arg file="${pharfile}"/>
+  </exec>
+ </target>
+
+
+ <target name="collectdeps" description="Copy package dependencies to lib/">
+  <delete dir="${libdir}"/>
+  <mkdir dir="${libdir}"/>
+
+  <pearPackageFileset id="dep-Console_CommandLine" package="pear.php.net/Console_CommandLine"/>
+  <pearPackageFileset id="dep-HTTP_Request2" package="pear.php.net/HTTP_Request2"/>
+  <pearPackageFileset id="dep-Net_URL2" package="pear.php.net/Net_URL2"/>
+  <pearPackageFileset id="dep-PEAR" package="pear.php.net/PEAR">
+   <include name="PEAR/Exception.php"/>
+  </pearPackageFileset>
+
+  <copy todir="${libdir}">
+   <fileset refid="dep-Console_CommandLine"/>
+   <fileset refid="dep-HTTP_Request2"/>
+   <fileset refid="dep-Net_URL2"/>
+   <fileset refid="dep-PEAR"/>
+  </copy>
+ </target>
+
+
+ <target name="docs" description="render documentation">
+  <rst file="README.rst"/>
+ </target>
+
+</project>
