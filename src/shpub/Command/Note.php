@@ -27,6 +27,16 @@ class Command_Note
                 'default'     => [],
             )
         );
+        $cmd->addOption(
+            'published',
+            array(
+                'long_name'   => '--published',
+                'description' => 'Publish date',
+                'help_name'   => 'DATE',
+                'action'      => 'StoreString',
+                'default'     => null,
+            )
+        );
         $cmd->addArgument(
             'text',
             [
@@ -42,6 +52,11 @@ class Command_Note
         $req = new Request($this->cfg->host, $this->cfg);
         $req->req->addPostParameter('h', 'entry');
         $req->req->addPostParameter('content', $command->args['text']);
+        if ($command->options['published'] !== null) {
+            $req->req->addPostParameter(
+                'published', $command->options['published']
+            );
+        }
 
         $files = $command->options['files'];
         $fileList = [
