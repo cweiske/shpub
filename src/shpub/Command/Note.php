@@ -49,13 +49,30 @@ class Command_Note
             'photo' => [],
             'video' => [],
         ];
+        $urls = [];
         foreach ($files as $filePath) {
-            if (!file_exists($filePath)) {
+            if (file_exists($filePath)) {
+                $type = 'photo';
+                $fileList[$type][] = $filePath;
+            } else if (strpos($filePath, '://') !== false) {
+                //url
+                $urls[] = $filePath;
+            } else {
                 Log::err('File does not exist: ' . $filePath);
                 exit(20);
             }
-            $type = 'photo';
-            $fileList[$type][] = $filePath;
+        }
+        if (count($urls)) {
+            if (count($urls) == 1) {
+                $req->req->addPostParameter('photo', reset($urls));
+            } else {
+                $n = 0;
+                foreach ($urls as $url) {
+                    $req->req->addPostParameter(
+                        'photo[' . $n++ . ']', reset($urls)
+                    );
+                }
+            }
         }
         foreach ($fileList as $type => $filePaths) {
             if (count($filePaths) == 1) {
