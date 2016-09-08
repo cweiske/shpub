@@ -73,9 +73,6 @@ class Cli
                     $this->cfg->host = $this->cfg->hosts[$key];
                 }
             }
-            if ($opts['user'] !== null) {
-                $this->cfg->host->user = $opts['user'];
-            }
             $this->cfg->setDebug($opts['debug']);
 
             return $res;
@@ -102,17 +99,6 @@ class Cli
                 'short_name'  => '-s',
                 'long_name'   => '--server',
                 'description' => 'Server URL',
-                'help_name'   => 'URL',
-                'action'      => 'StoreString',
-                'default'     => null,
-            )
-        );
-        $optParser->addOption(
-            'user',
-            array(
-                'short_name'  => '-u',
-                'long_name'   => '--user',
-                'description' => 'User URL',
                 'help_name'   => 'URL',
                 'action'      => 'StoreString',
                 'default'     => null,
