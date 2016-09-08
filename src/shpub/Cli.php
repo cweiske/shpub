@@ -90,7 +90,7 @@ class Cli
     {
         $optParser = new \Console_CommandLine();
         $optParser->description = 'shpub';
-        $optParser->version = '0.0.3';
+        $optParser->version = '0.0.4';
         $optParser->subcommand_required = true;
 
         $optParser->addOption(

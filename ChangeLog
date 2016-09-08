@@ -1,5 +1,10 @@
 2016-09-08  Christian Weiske  <cweiske@cweiske.de>
 
+	* --publish option for "note" command
+	* Version 0.0.4
+
+2016-09-08  Christian Weiske  <cweiske@cweiske.de>
+
 	* Add support for notes with file uploads
 	* Better curl commands when using --debug
 	* Version 0.0.3
