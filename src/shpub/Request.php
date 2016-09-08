@@ -6,10 +6,12 @@ class Request
     public $req;
     public $cfg;
 
+    protected $uploadsInfo = [];
+
     public function __construct($host, $cfg)
     {
         $this->cfg = $cfg;
-        $this->req = new \HTTP_Request2($host->endpoints->micropub, 'POST');
+        $this->req = new MyHttpRequest2($host->endpoints->micropub, 'POST');
         $this->req->setHeader('User-Agent: shpub');
         if (version_compare(PHP_VERSION, '5.6.0', '<')) {
             //correct ssl validation on php 5.5 is a pain, so disable
@@ -20,9 +22,11 @@ class Request
         $this->req->setHeader('authorization', 'Bearer ' . $host->token);
     }
 
-    public function send($body)
+    public function send($body = null)
     {
-        $this->req->setBody($body);
+        if ($body !== null) {
+            $this->req->setBody($body);
+        }
         if ($this->cfg->debug) {
             $this->printCurl();
         }
@@ -38,6 +42,17 @@ class Request
         return $res;
     }
 
+    /**
+     * @param string                $fieldName    name of file-upload field
+     * @param string|resource|array $filename     full name of local file,
+     *               pointer to open file or an array of files
+     */
+    public function addUpload($fieldName, $filename)
+    {
+        $this->uploadsInfo[$fieldName] = $filename;
+        return $this->req->addUpload($fieldName, $filename);
+    }
+
     protected function printCurl()
     {
         $command = 'curl';
@@ -48,7 +63,32 @@ class Request
             $caseKey = implode('-', array_map('ucfirst', explode('-', $key)));
             $command .= ' -H ' . escapeshellarg($caseKey . ': ' . $val);
         }
-        $command .= ' --data ' . escapeshellarg($this->req->getBody());
+
+        $postParams = $this->req->getPostParams();
+
+        if (count($this->uploadsInfo) == 0) {
+            foreach ($postParams as $k => $v) {
+                $command .= ' -d ' . escapeshellarg($k . '=' . $v);
+            }
+        } else {
+            foreach ($postParams as $k => $v) {
+                $command .= ' -F ' . escapeshellarg($k . '=' . $v);
+            }
+            foreach ($this->uploadsInfo as $fieldName => $filename) {
+                if (!is_array($filename)) {
+                    $command .= ' -F ' . escapeshellarg(
+                        $fieldName . '=@' . $filename
+                    );
+                } else {
+                    foreach ($filename as $k => $realFilename) {
+                        $command .= ' -F ' . escapeshellarg(
+                            $fieldName . '[' . $k . ']=@' . $realFilename
+                        );
+                    }
+                }
+            }
+        }
+
         $command .= ' ' . escapeshellarg((string) $this->req->getUrl());
 
         echo $command . "\n";

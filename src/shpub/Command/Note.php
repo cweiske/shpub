@@ -16,6 +16,17 @@ class Command_Note
     public static function opts(\Console_CommandLine $optParser)
     {
         $cmd = $optParser->addCommand('note');
+        $cmd->addOption(
+            'files',
+            array(
+                'short_name'  => '-f',
+                'long_name'   => '--files',
+                'description' => 'Files to upload',
+                'help_name'   => 'PATH',
+                'action'      => 'StoreArray',
+                'default'     => [],
+            )
+        );
         $cmd->addArgument(
             'text',
             [
@@ -28,15 +39,33 @@ class Command_Note
 
     public function run($command)
     {
-        $data = [
-            'h'       => 'entry',
-            'content' => $command->args['text'],
-        ];
-
-        $body = http_build_query($data);
-
         $req = new Request($this->cfg->host, $this->cfg);
-        $res = $req->send($body);
+        $req->req->addPostParameter('h', 'entry');
+        $req->req->addPostParameter('content', $command->args['text']);
+
+        $files = $command->options['files'];
+        $fileList = [
+            'audio' => [],
+            'photo' => [],
+            'video' => [],
+        ];
+        foreach ($files as $filePath) {
+            if (!file_exists($filePath)) {
+                Log::err('File does not exist: ' . $filePath);
+                exit(20);
+            }
+            $type = 'photo';
+            $fileList[$type][] = $filePath;
+        }
+        foreach ($fileList as $type => $filePaths) {
+            if (count($filePaths) == 1) {
+                $req->addUpload($type, reset($filePaths));
+            } else if (count($filePaths) > 0) {
+                $req->addUpload($type, $filePaths);
+            }
+        }
+
+        $res = $req->send();
         $postUrl = $res->getHeader('Location');
         echo "Post created at server\n";
         echo $postUrl . "\n";
