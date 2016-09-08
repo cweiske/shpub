@@ -45,7 +45,8 @@ class Request
             $command .= ' -X ' . $this->req->getMethod();
         }
         foreach ($this->req->getHeaders() as $key => $val) {
-            $command .= ' -H ' . escapeshellarg($key . ': ' . $val);
+            $caseKey = implode('-', array_map('ucfirst', explode('-', $key)));
+            $command .= ' -H ' . escapeshellarg($caseKey . ': ' . $val);
         }
         $command .= ' --data ' . escapeshellarg($this->req->getBody());
         $command .= ' ' . escapeshellarg((string) $this->req->getUrl());
