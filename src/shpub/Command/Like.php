@@ -13,9 +13,21 @@ class Command_Like
         $this->cfg = $cfg;
     }
 
-    public function run($url)
+    public static function opts(\Console_CommandLine $optParser)
     {
-        $url = Validator::url($url, 'url');
+        $cmd = $optParser->addCommand('like');
+        $cmd->addArgument(
+            'url',
+            [
+                'optional'    => false,
+                'description' => 'URL that is liked',
+            ]
+        );
+    }
+
+    public function run($command)
+    {
+        $url = Validator::url($command->args['url'], 'url');
         if ($url === false) {
             exit(10);
         }

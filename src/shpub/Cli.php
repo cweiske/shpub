@@ -33,24 +33,12 @@ class Cli
                 $cmd->run($res->command->options['verbose']);
                 break;
 
-            case 'like':
-                $this->requireValidHost();
-                $cmd = new Command_Like($this->cfg);
-                $cmd->run($res->command->args['url']);
-                break;
-
-            case 'reply':
-                $this->requireValidHost();
-                $cmd = new Command_Reply($this->cfg);
-                $cmd->run(
-                    $res->command->args['url'],
-                    implode(' ', $res->command->args['text'])
-                );
-                break;
-
             default:
-                var_dump($this->cfg->host, $res);
-                Log::err('FIXME');
+                $class = 'shpub\\Command_' . ucfirst($res->command_name);
+                $this->requireValidHost();
+                $cmd = new $class($this->cfg);
+                $cmd->run($res->command);
+                break;
             }
         } catch (\Exception $e) {
             echo 'Error: ' . $e->getMessage() . "\n";
@@ -186,32 +174,9 @@ class Cli
             )
         );
 
-        //$cmd = $optParser->addCommand('post');
-        $cmd = $optParser->addCommand('reply');
-        $cmd->addArgument(
-            'url',
-            [
-                'optional'    => false,
-                'description' => 'URL that is replied to',
-            ]
-        );
-        $cmd->addArgument(
-            'text',
-            [
-                'optional'    => false,
-                'multiple'    => true,
-                'description' => 'Reply text',
-            ]
-        );
-
-        $cmd = $optParser->addCommand('like');
-        $cmd->addArgument(
-            'url',
-            [
-                'optional'    => false,
-                'description' => 'URL that is liked',
-            ]
-        );
+        Command_Note::opts($optParser);
+        Command_Reply::opts($optParser);
+        Command_Like::opts($optParser);
 
         return $optParser;
     }
