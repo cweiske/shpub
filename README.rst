@@ -46,3 +46,26 @@ Create a reply
     $ ./bin/shpub.php reply http://example.org/ "Hey, cool!"
     Reply created at server
     http://anoweco.bogo/comment/42.htm
+
+
+Create a note
+=============
+A normal note::
+
+    $ ./bin/shpub.php note "oh this is cool!"
+    Reply created at server
+    http://known.bogo/2016/oh-this-is-cool.htm
+
+Note with an image::
+
+    $ ./bin/shpub.php note -f image.jpg "this is so cute"
+    Reply created at server
+    http://known.bogo/2016/this-is-so-cute.htm
+
+You can use ``-f`` several times to upload multiple files.
+
+URL image upload::
+
+    $ ./bin/shpub.php note -f http://example.org/1.jpg "img url!"
+    Reply created at server
+    http://known.bogo/2016/img-url.htm
