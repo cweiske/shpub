@@ -59,37 +59,56 @@ class Command_Note
         }
 
         $files = $command->options['files'];
-        $fileList = [
+        $fileList = $urlList = [
             'audio' => [],
-            'photo' => [],
+            'image' => [],
             'video' => [],
         ];
-        $urls = [];
+
         foreach ($files as $filePath) {
-            if (file_exists($filePath)) {
-                $type = 'photo';
-                $fileList[$type][] = $filePath;
-            } else if (strpos($filePath, '://') !== false) {
+            if (strpos($filePath, '://') !== false) {
                 //url
-                $urls[] = $filePath;
+                $mte      = new \MIME_Type_Extension();
+                $mimetype = $mte->getMIMEType($filePath);
+                $media    = \MIME_Type::getMedia($mimetype);
+                if (!isset($urlList[$media])) {
+                    Log::err('File type not allowed: ' . $mimetype);
+                    exit(20);
+                }
+                $urlList[$media][] = $filePath;
+            } else if (file_exists($filePath)) {
+                //file
+                $mimetype = \MIME_Type::autoDetect($filePath);
+                $media    = \MIME_Type::getMedia($mimetype);
+                if (!isset($urlList[$media])) {
+                    Log::err('File type not allowed: ' . $mimetype);
+                    exit(20);
+                }
+                $fileList[$media][] = $filePath;
             } else {
                 Log::err('File does not exist: ' . $filePath);
                 exit(20);
             }
         }
-        if (count($urls)) {
+        foreach ($urlList as $type => $urls) {
+            if ($type == 'image') {
+                $type = 'photo';
+            }
             if (count($urls) == 1) {
-                $req->req->addPostParameter('photo', reset($urls));
-            } else {
+                $req->req->addPostParameter($type, reset($urls));
+            } else if (count($urls) > 1) {
                 $n = 0;
                 foreach ($urls as $url) {
                     $req->req->addPostParameter(
-                        'photo[' . $n++ . ']', reset($urls)
+                        $type . '[' . $n++ . ']', reset($urls)
                     );
                 }
             }
         }
         foreach ($fileList as $type => $filePaths) {
+            if ($type == 'image') {
+                $type = 'photo';
+            }
             if (count($filePaths) == 1) {
                 $req->addUpload($type, reset($filePaths));
             } else if (count($filePaths) > 0) {

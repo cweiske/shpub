@@ -53,6 +53,7 @@
 
   <pearPackageFileset id="dep-Console_CommandLine" package="pear.php.net/Console_CommandLine"/>
   <pearPackageFileset id="dep-HTTP_Request2" package="pear.php.net/HTTP_Request2"/>
+  <pearPackageFileset id="dep-MIME_Type" package="pear.php.net/MIME_Type"/>
   <pearPackageFileset id="dep-Net_URL2" package="pear.php.net/Net_URL2"/>
   <pearPackageFileset id="dep-PEAR" package="pear.php.net/PEAR">
    <include name="PEAR/Exception.php"/>
@@ -61,6 +62,7 @@
   <copy todir="${libdir}">
    <fileset refid="dep-Console_CommandLine"/>
    <fileset refid="dep-HTTP_Request2"/>
+   <fileset refid="dep-MIME_Type"/>
    <fileset refid="dep-Net_URL2"/>
    <fileset refid="dep-PEAR"/>
   </copy>
