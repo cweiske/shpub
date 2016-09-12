@@ -48,6 +48,17 @@ class Command_Note
                 'default'     => null,
             )
         );
+        $cmd->addOption(
+            'x',
+            array(
+                'short_name'  => '-x',
+                'long_name'   => '--xprop',
+                'description' => 'Additional property',
+                'help_name'   => 'key=value',
+                'action'      => 'StoreArray',
+                'default'     => [],
+            )
+        );
         $cmd->addArgument(
             'text',
             [
@@ -129,6 +140,13 @@ class Command_Note
                 $req->addUpload($type, reset($filePaths));
             } else if (count($filePaths) > 0) {
                 $req->addUpload($type, $filePaths);
+            }
+        }
+
+        if (count($command->options['x'])) {
+            foreach ($command->options['x'] as $xproperty) {
+                list($propkey, $propval) = explode('=', $xproperty, 2);
+                $req->req->addPostParameter($propkey, $propval);
             }
         }
 

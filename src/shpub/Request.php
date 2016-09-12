@@ -68,7 +68,15 @@ class Request
 
         if (count($this->uploadsInfo) == 0) {
             foreach ($postParams as $k => $v) {
-                $command .= ' -d ' . escapeshellarg($k . '=' . $v);
+                if (!is_array($v)) {
+                    $command .= ' -d ' . escapeshellarg($k . '=' . $v);
+                } else {
+                    foreach ($v as $ak => $av) {
+                        $command .= ' -d ' . escapeshellarg(
+                            $k . '[' . $ak . ']=' . $av
+                        );
+                    }
+                }
             }
         } else {
             foreach ($postParams as $k => $v) {
