@@ -53,6 +53,21 @@ class Request
         return $this->req->addUpload($fieldName, $filename);
     }
 
+    /**
+     * Add one or multiple POST parameters.
+     * Automatically adds them as array or as string.
+     *
+     * @param string       $key    Parameter name
+     * @param string|array $values One or multiple values
+     */
+    public function addPostParameter($key, $values)
+    {
+        if (count($values) == 1) {
+            $values = reset($values);
+        }
+        $this->req->addPostParameter($key, $values);
+    }
+
     protected function printCurl()
     {
         $command = 'curl';

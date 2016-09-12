@@ -49,6 +49,17 @@ class Command_Note
             )
         );
         $cmd->addOption(
+            'syndication',
+            array(
+                'short_name'  => '-s',
+                'long_name'   => '--syndication',
+                'description' => 'Syndication URL(s)',
+                'help_name'   => 'URL',
+                'action'      => 'StoreArray',
+                'default'     => [],
+            )
+        );
+        $cmd->addOption(
             'x',
             array(
                 'short_name'  => '-x',
@@ -80,8 +91,13 @@ class Command_Note
             );
         }
         if (count($command->options['categories'])) {
-            $req->req->addPostParameter(
+            $req->addPostParameter(
                 'category', $command->options['categories']
+            );
+        }
+        if (count($command->options['syndication'])) {
+            $req->addPostParameter(
+                'syndication', $command->options['syndication']
             );
         }
 
@@ -127,7 +143,7 @@ class Command_Note
                 $n = 0;
                 foreach ($urls as $url) {
                     $req->req->addPostParameter(
-                        $type . '[' . $n++ . ']', reset($urls)
+                        $type . '[' . $n++ . ']', $url
                     );
                 }
             }
@@ -144,9 +160,16 @@ class Command_Note
         }
 
         if (count($command->options['x'])) {
+            $postParams = [];
             foreach ($command->options['x'] as $xproperty) {
                 list($propkey, $propval) = explode('=', $xproperty, 2);
-                $req->req->addPostParameter($propkey, $propval);
+                if (!isset($postParams[$propkey] )) {
+                    $postParams[$propkey] = [];
+                }
+                $postParams[$propkey][] = $propval;
+            }
+            foreach ($postParams as $propkey => $propvals) {
+                $req->addPostParameter($propkey, $propvals);
             }
         }
 
