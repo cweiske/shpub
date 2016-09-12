@@ -17,6 +17,17 @@ class Command_Note
     {
         $cmd = $optParser->addCommand('note');
         $cmd->addOption(
+            'categories',
+            array(
+                'short_name'  => '-c',
+                'long_name'   => '--category',
+                'description' => 'Categories',
+                'help_name'   => 'CAT',
+                'action'      => 'StoreArray',
+                'default'     => [],
+            )
+        );
+        $cmd->addOption(
             'files',
             array(
                 'short_name'  => '-f',
@@ -55,6 +66,11 @@ class Command_Note
         if ($command->options['published'] !== null) {
             $req->req->addPostParameter(
                 'published', $command->options['published']
+            );
+        }
+        if (count($command->options['categories'])) {
+            $req->req->addPostParameter(
+                'category', $command->options['categories']
             );
         }
 
