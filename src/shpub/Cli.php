@@ -163,6 +163,7 @@ class Cli
         Command_Note::opts($optParser);
         Command_Reply::opts($optParser);
         Command_Like::opts($optParser);
+        Command_Repost::opts($optParser);
 
         return $optParser;
     }
