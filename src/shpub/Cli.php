@@ -160,6 +160,7 @@ class Cli
             )
         );
 
+        Command_Article::opts($optParser);
         Command_Note::opts($optParser);
         Command_Reply::opts($optParser);
         Command_Like::opts($optParser);
