@@ -36,9 +36,10 @@ class Command_Connect
 
         list($redirect_uri, $socketStr) = $this->getHttpServerData();
         $state = time();
-        echo "To authenticate, open the following URL:\n"
+        Log::msg(
+            "To authenticate, open the following URL:\n"
             . $this->getBrowserAuthUrl($host, $user, $redirect_uri, $state)
-            . "\n";
+        );
 
         $authParams = $this->startHttpServer($socketStr);
         if ($authParams['state'] != $state) {
@@ -72,7 +73,7 @@ class Command_Connect
         }
         $this->cfg->hosts[$hostKey] = $host;
         $this->cfg->save();
-        echo "Server configuration $hostKey saved successfully.\n";
+        Log::info("Server configuration $hostKey saved successfully.");
     }
 
     protected function fetchAccessToken(

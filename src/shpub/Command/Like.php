@@ -46,8 +46,8 @@ class Command_Like extends Command_AbstractProps
             Log::err($res->getBody());
             exit(20);
         } else {
-            echo "Like created at server\n";
-            echo $postUrl . "\n";
+            Log::info('Like created at server');
+            Log::msg($postUrl);
         }
     }
 }

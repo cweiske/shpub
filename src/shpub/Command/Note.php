@@ -36,8 +36,8 @@ class Command_Note extends Command_AbstractProps
 
         $res = $req->send();
         $postUrl = $res->getHeader('Location');
-        echo "Post created at server\n";
-        echo $postUrl . "\n";
+        Log::info('Post created at server');
+        Log::msg($postUrl);
     }
 }
 ?>

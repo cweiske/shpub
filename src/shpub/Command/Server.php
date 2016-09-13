@@ -11,10 +11,10 @@ class Command_Server
     public function run($verbose)
     {
         foreach ($this->cfg->hosts as $key => $host) {
-            echo $key . "\n";
+            Log::msg($key);
             if ($verbose) {
-                echo '  URL:  ' . $host->server . "\n";
-                echo '  User: ' . $host->user . "\n";
+                Log::msg('  URL:  ' . $host->server);
+                Log::msg('  User: ' . $host->user);
             }
         }
     }

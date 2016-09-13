@@ -41,7 +41,7 @@ class Cli
                 break;
             }
         } catch (\Exception $e) {
-            echo 'Error: ' . $e->getMessage() . "\n";
+            Log::err('Error: ' . $e->getMessage());
             exit(1);
         }
     }

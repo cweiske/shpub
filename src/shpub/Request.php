@@ -114,6 +114,6 @@ class Request
 
         $command .= ' ' . escapeshellarg((string) $this->req->getUrl());
 
-        echo $command . "\n";
+        Log::msg($command);
     }
 }

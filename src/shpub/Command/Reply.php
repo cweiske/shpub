@@ -50,8 +50,8 @@ class Command_Reply extends Command_AbstractProps
         $res = $req->send();
 
         $postUrl = $res->getHeader('Location');
-        echo "Reply created at server\n";
-        echo $postUrl . "\n";
+        Log::info('Reply created at server');
+        Log::msg($postUrl);
     }
 }
 ?>
