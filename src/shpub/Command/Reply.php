@@ -1,7 +1,7 @@
 <?php
 namespace shpub;
 
-class Command_Reply
+class Command_Reply extends Command_AbstractProps
 {
     /**
      * @var Config
@@ -16,6 +16,7 @@ class Command_Reply
     public static function opts(\Console_CommandLine $optParser)
     {
         $cmd = $optParser->addCommand('reply');
+        static::optsGeneric($cmd);
         $cmd->addArgument(
             'url',
             [
@@ -32,23 +33,22 @@ class Command_Reply
             ]
         );
     }
-    public function run($url, $text)
+
+    public function run(\Console_CommandLine_Result $cmdRes)
     {
-        $url = Validator::url($url, 'url');
+        $url = Validator::url($cmdRes->args['url'], 'url');
         if ($url === false) {
             exit(10);
         }
 
-        $body = http_build_query(
-            [
-                'h'           => 'entry',
-                'content'     => $text,
-                'in-reply-to' => $url,
-            ]
-        );
-
         $req = new Request($this->cfg->host, $this->cfg);
-        $res = $req->send($body);
+        $req->req->addPostParameter('h', 'entry');
+        $req->req->addPostParameter('content', implode(' ', $cmdRes->args['text']));
+        $req->req->addPostParameter('in-reply-to', $url);
+
+        $this->handleGenericOptions($cmdRes, $req);
+        $res = $req->send();
+
         $postUrl = $res->getHeader('Location');
         echo "Reply created at server\n";
         echo $postUrl . "\n";

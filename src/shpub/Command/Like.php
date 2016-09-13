@@ -1,7 +1,7 @@
 <?php
 namespace shpub;
 
-class Command_Like
+class Command_Like extends Command_AbstractProps
 {
     /**
      * @var Config
@@ -16,6 +16,7 @@ class Command_Like
     public static function opts(\Console_CommandLine $optParser)
     {
         $cmd = $optParser->addCommand('like');
+        static::optsGeneric($cmd);
         $cmd->addArgument(
             'url',
             [
@@ -25,22 +26,20 @@ class Command_Like
         );
     }
 
-    public function run($command)
+    public function run(\Console_CommandLine_Result $cmdRes)
     {
-        $url = Validator::url($command->args['url'], 'url');
+        $url = Validator::url($cmdRes->args['url'], 'url');
         if ($url === false) {
             exit(10);
         }
 
-        $body = http_build_query(
-            [
-                'h'       => 'entry',
-                'like-of' => $url,
-            ]
-        );
-
         $req = new Request($this->cfg->host, $this->cfg);
-        $res = $req->send($body);
+        $req->req->addPostParameter('h', 'entry');
+        $req->req->addPostParameter('like-of', $url);
+
+        $this->handleGenericOptions($cmdRes, $req);
+        $res = $req->send();
+
         $postUrl = $res->getHeader('Location');
         if ($postUrl === null) {
             Log::err('Error: Server sent no "Location" header and said:');
