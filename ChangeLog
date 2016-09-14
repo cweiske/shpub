@@ -1,3 +1,11 @@
+2016-09-14  Christian Weiske  <cweiske@cweiske.de>
+
+	* New commands: delete, article, repost
+	* All post commands share the same generic options
+	* New options: category, slug, html, x (generic option)
+	* File types are determined automatically
+	* Versio 0.0.5
+
 2016-09-08  Christian Weiske  <cweiske@cweiske.de>
 
 	* --publish option for "note" command
