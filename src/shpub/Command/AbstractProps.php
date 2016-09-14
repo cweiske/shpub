@@ -6,6 +6,16 @@ namespace shpub;
  */
 class Command_AbstractProps
 {
+    /**
+     * @var Config
+     */
+    protected $cfg;
+
+    public function __construct($cfg)
+    {
+        $this->cfg = $cfg;
+    }
+
     public static function optsGeneric(\Console_CommandLine_Command $cmd)
     {
         $cmd->addOption(

@@ -3,16 +3,6 @@ namespace shpub;
 
 class Command_Like extends Command_AbstractProps
 {
-    /**
-     * @var Config
-     */
-    protected $cfg;
-
-    public function __construct($cfg)
-    {
-        $this->cfg = $cfg;
-    }
-
     public static function opts(\Console_CommandLine $optParser)
     {
         $cmd = $optParser->addCommand('like');
