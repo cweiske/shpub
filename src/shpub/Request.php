@@ -7,6 +7,7 @@ class Request
     public $cfg;
 
     protected $uploadsInfo = [];
+    protected $dedicatedBody = false;
 
     public function __construct($host, $cfg)
     {
@@ -25,6 +26,7 @@ class Request
     public function send($body = null)
     {
         if ($body !== null) {
+            $this->dedicatedBody = true;
             $this->req->setBody($body);
         }
         if ($this->cfg->debug) {
@@ -110,6 +112,10 @@ class Request
                     }
                 }
             }
+        }
+
+        if ($this->dedicatedBody) {
+            $command .= ' --data ' . escapeshellarg($this->req->getBody());
         }
 
         $command .= ' ' . escapeshellarg((string) $this->req->getUrl());

@@ -168,6 +168,7 @@ class Cli
 
         Command_Delete::opts($optParser);
         Command_Undelete::opts($optParser);
+        Command_Update::opts($optParser);
 
         return $optParser;
     }
