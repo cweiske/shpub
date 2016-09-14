@@ -167,6 +167,7 @@ class Cli
         Command_Repost::opts($optParser);
 
         Command_Delete::opts($optParser);
+        Command_Undelete::opts($optParser);
 
         return $optParser;
     }
