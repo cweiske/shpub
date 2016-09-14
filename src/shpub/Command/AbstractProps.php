@@ -41,6 +41,17 @@ class Command_AbstractProps
             )
         );
         $cmd->addOption(
+            'slug',
+            array(
+                'short_name'  => '-s',
+                'long_name'   => '--slug',
+                'description' => 'URL path',
+                'help_name'   => 'PATH',
+                'action'      => 'StoreString',
+                'default'     => null,
+            )
+        );
+        $cmd->addOption(
             'syndication',
             array(
                 'short_name'  => '-s',
@@ -75,6 +86,11 @@ class Command_AbstractProps
         if (count($cmdRes->options['categories'])) {
             $req->addPostParameter(
                 'category', $cmdRes->options['categories']
+            );
+        }
+        if ($cmdRes->options['slug'] !== null) {
+            $req->req->addPostParameter(
+                'slug', $cmdRes->options['slug']
             );
         }
         if (count($cmdRes->options['syndication'])) {
