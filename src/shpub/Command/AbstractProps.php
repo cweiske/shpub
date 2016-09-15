@@ -62,6 +62,16 @@ class Command_AbstractProps
             )
         );
         $cmd->addOption(
+            'updated',
+            array(
+                'long_name'   => '--updated',
+                'description' => 'Update date',
+                'help_name'   => 'DATE',
+                'action'      => 'StoreString',
+                'default'     => null,
+            )
+        );
+        $cmd->addOption(
             'slug',
             array(
                 'short_name'  => '-s',
@@ -102,6 +112,11 @@ class Command_AbstractProps
         if ($cmdRes->options['published'] !== null) {
             $req->req->addPostParameter(
                 'published', $cmdRes->options['published']
+            );
+        }
+        if ($cmdRes->options['updated'] !== null) {
+            $req->req->addPostParameter(
+                'updated', $cmdRes->options['updated']
             );
         }
         if (count($cmdRes->options['categories'])) {
