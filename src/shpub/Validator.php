@@ -28,5 +28,18 @@ class Validator
 
         return $url;
     }
+
+    public static function rsvp($answer)
+    {
+        $allowed = ['yes', 'no', 'maybe'];
+        if (false === array_search($answer, $allowed)) {
+            Log::err(
+                'Invalid RSVP answer given; allowed are: '
+                . implode (', ', $allowed)
+            );
+            return false;
+        }
+        return $answer;
+    }
 }
 ?>
