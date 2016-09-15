@@ -41,6 +41,17 @@ class Command_AbstractProps
             )
         );
         $cmd->addOption(
+            'name',
+            array(
+                'short_name'  => '-n',
+                'long_name'   => '--name',
+                'description' => 'Post title',
+                'help_name'   => 'TITLE',
+                'action'      => 'StoreString',
+                'default'     => null,
+            )
+        );
+        $cmd->addOption(
             'published',
             array(
                 'long_name'   => '--published',
@@ -96,6 +107,11 @@ class Command_AbstractProps
         if (count($cmdRes->options['categories'])) {
             $req->addPostParameter(
                 'category', $cmdRes->options['categories']
+            );
+        }
+        if ($cmdRes->options['name'] !== null) {
+            $req->req->addPostParameter(
+                'name', $cmdRes->options['name']
             );
         }
         if ($cmdRes->options['slug'] !== null) {
