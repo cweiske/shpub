@@ -6,6 +6,7 @@ class Command_Note extends Command_AbstractProps
     public static function opts(\Console_CommandLine $optParser)
     {
         $cmd = $optParser->addCommand('note');
+        static::addOptHtml($cmd);
         static::optsGeneric($cmd);
         $cmd->addArgument(
             'text',
@@ -21,7 +22,7 @@ class Command_Note extends Command_AbstractProps
     {
         $req = new Request($this->cfg->host, $this->cfg);
         $req->setType('entry');
-        $req->addProperty('content', $cmdRes->args['text']);
+        $req->addContent($cmdRes->args['text'], $cmdRes->options['html']);
         $this->handleGenericOptions($cmdRes, $req);
 
         $res = $req->send();

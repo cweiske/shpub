@@ -6,6 +6,7 @@ class Command_Reply extends Command_AbstractProps
     public static function opts(\Console_CommandLine $optParser)
     {
         $cmd = $optParser->addCommand('reply');
+        static::addOptHtml($cmd);
         static::optsGeneric($cmd);
         $cmd->addArgument(
             'url',
@@ -18,7 +19,7 @@ class Command_Reply extends Command_AbstractProps
             'text',
             [
                 'optional'    => false,
-                'multiple'    => true,
+                'multiple'    => false,
                 'description' => 'Reply text',
             ]
         );
@@ -33,8 +34,8 @@ class Command_Reply extends Command_AbstractProps
 
         $req = new Request($this->cfg->host, $this->cfg);
         $req->setType('entry');
-        $req->addProperty('content', implode(' ', $cmdRes->args['text']));
         $req->addProperty('in-reply-to', $url);
+        $req->addContent($cmdRes->args['text'], $cmdRes->options['html']);
 
         $this->handleGenericOptions($cmdRes, $req);
         $res = $req->send();

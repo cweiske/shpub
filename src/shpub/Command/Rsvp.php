@@ -9,6 +9,7 @@ class Command_Rsvp extends Command_AbstractProps
     public static function opts(\Console_CommandLine $optParser)
     {
         $cmd = $optParser->addCommand('rsvp');
+        static::addOptHtml($cmd);
         static::optsGeneric($cmd);
         $cmd->addArgument(
             'url',
@@ -50,8 +51,8 @@ class Command_Rsvp extends Command_AbstractProps
         $req->setType('h', 'entry');
         $req->addProperty('in-reply-to', $url);
         $req->addProperty('rsvp', $rsvp);
-        if ($cmdRes->args['text'] != '') {
-            $req->addProperty('content', $cmdRes->args['text']);
+        if ($cmdRes->args['text']) {
+            $req->addContent($cmdRes->args['text'], $cmdRes->options['html']);
         }
         $this->handleGenericOptions($cmdRes, $req);
 

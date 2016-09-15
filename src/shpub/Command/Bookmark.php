@@ -6,6 +6,7 @@ class Command_Bookmark extends Command_AbstractProps
     public static function opts(\Console_CommandLine $optParser)
     {
         $cmd = $optParser->addCommand('bookmark');
+        static::addOptHtml($cmd);
         static::optsGeneric($cmd);
         $cmd->addArgument(
             'url',
@@ -36,7 +37,7 @@ class Command_Bookmark extends Command_AbstractProps
         $req->addProperty('bookmark-of', $url);
 
         if ($cmdRes->args['text']) {
-            $req->addProperty('content', $cmdRes->args['text']);
+            $req->addContent($cmdRes->args['text'], $cmdRes->options['html']);
         }
 
 

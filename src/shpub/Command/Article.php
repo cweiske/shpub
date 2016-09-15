@@ -6,16 +6,7 @@ class Command_Article extends Command_AbstractProps
     public static function opts(\Console_CommandLine $optParser)
     {
         $cmd = $optParser->addCommand('article');
-        $cmd->addOption(
-            'html',
-            array(
-                'short_name'  => '-h',
-                'long_name'   => '--html',
-                'description' => 'Text content is HTML',
-                'action'      => 'StoreTrue',
-                'default'     => false,
-            )
-        );
+        static::addOptHtml($cmd);
         static::optsGeneric($cmd);
         $cmd->addArgument(
             'title',
@@ -40,13 +31,7 @@ class Command_Article extends Command_AbstractProps
         $req = new Request($this->cfg->host, $this->cfg);
         $req->setType('entry');
         $req->addProperty('name', $cmdRes->args['title']);
-        if ($cmdRes->options['html']) {
-            $req->addProperty(
-                'content', ['html' => $cmdRes->args['text']]
-            );
-        } else {
-            $req->addProperty('content', $cmdRes->args['text']);
-        }
+        $req->addContent($cmdRes->args['text'], $cmdRes->options['html']);
         $this->handleGenericOptions($cmdRes, $req);
 
         $res = $req->send();

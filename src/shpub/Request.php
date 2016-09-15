@@ -122,6 +122,18 @@ class Request
         return $this->req->addUpload($fieldName, $filename);
     }
 
+    public function addContent($text, $isHtml)
+    {
+        if ($isHtml) {
+            $this->addProperty(
+                'content', ['html' => $text]
+            );
+        } else {
+            $this->addProperty('content', $text);
+        }
+
+    }
+
     /**
      * Adds a micropub property to the request.
      *

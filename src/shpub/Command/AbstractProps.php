@@ -107,6 +107,20 @@ class Command_AbstractProps
         static::addOptJson($cmd);
     }
 
+    protected static function addOptHtml(\Console_CommandLine_Command $cmd)
+    {
+        $cmd->addOption(
+            'html',
+            array(
+                'short_name'  => '-h',
+                'long_name'   => '--html',
+                'description' => 'Text content is HTML',
+                'action'      => 'StoreTrue',
+                'default'     => false,
+            )
+        );
+    }
+
     protected static function addOptJson(\Console_CommandLine_Command $cmd)
     {
         $cmd->addOption(
