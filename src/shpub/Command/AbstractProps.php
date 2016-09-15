@@ -33,7 +33,7 @@ class Command_AbstractProps
             'files',
             array(
                 'short_name'  => '-f',
-                'long_name'   => '--files',
+                'long_name'   => '--file',
                 'description' => 'Files or URLs to upload',
                 'help_name'   => 'PATH',
                 'action'      => 'StoreArray',
