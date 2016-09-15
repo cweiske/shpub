@@ -24,8 +24,8 @@ class Command_Repost extends Command_AbstractProps
         }
 
         $req = new Request($this->cfg->host, $this->cfg);
-        $req->req->addPostParameter('h', 'entry');
-        $req->req->addPostParameter('repost-of', $url);
+        $req->setType('entry');
+        $req->addProperty('repost-of', $url);
 
         $this->handleGenericOptions($cmdRes, $req);
         $res = $req->send();

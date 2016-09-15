@@ -6,6 +6,7 @@ class Command_Undelete extends Command_AbstractProps
     public static function opts(\Console_CommandLine $optParser)
     {
         $cmd = $optParser->addCommand('undelete');
+        static::addOptJson($cmd);
         $cmd->addArgument(
             'url',
             [
@@ -23,8 +24,9 @@ class Command_Undelete extends Command_AbstractProps
         }
 
         $req = new Request($this->cfg->host, $this->cfg);
-        $req->req->addPostParameter('action', 'undelete');
-        $req->req->addPostParameter('url', $url);
+        $this->handleOptJson($cmdRes, $req);
+        $req->setAction('undelete');
+        $req->setUrl($url);
 
         $res = $req->send();
         Log::info('Post restored at server');

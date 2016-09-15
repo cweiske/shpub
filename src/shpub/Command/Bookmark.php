@@ -32,11 +32,11 @@ class Command_Bookmark extends Command_AbstractProps
         }
 
         $req = new Request($this->cfg->host, $this->cfg);
-        $req->req->addPostParameter('h', 'entry');
-        $req->req->addPostParameter('bookmark-of', $url);
+        $req->setType('entry');
+        $req->addProperty('bookmark-of', $url);
 
         if ($cmdRes->args['text']) {
-            $req->req->addPostParameter('content', $cmdRes->args['text']);
+            $req->addProperty('content', $cmdRes->args['text']);
         }
 
 

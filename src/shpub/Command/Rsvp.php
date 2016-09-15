@@ -47,11 +47,11 @@ class Command_Rsvp extends Command_AbstractProps
         }
 
         $req = new Request($this->cfg->host, $this->cfg);
-        $req->req->addPostParameter('h', 'entry');
-        $req->req->addPostParameter('in-reply-to', $url);
-        $req->req->addPostParameter('rsvp', $rsvp);
+        $req->setType('h', 'entry');
+        $req->addProperty('in-reply-to', $url);
+        $req->addProperty('rsvp', $rsvp);
         if ($cmdRes->args['text'] != '') {
-            $req->req->addPostParameter('content', $cmdRes->args['text']);
+            $req->addProperty('content', $cmdRes->args['text']);
         }
         $this->handleGenericOptions($cmdRes, $req);
 

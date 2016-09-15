@@ -104,11 +104,27 @@ class Command_AbstractProps
                 'default'     => [],
             )
         );
+        static::addOptJson($cmd);
+    }
+
+    protected static function addOptJson(\Console_CommandLine_Command $cmd)
+    {
+        $cmd->addOption(
+            'json',
+            array(
+                'long_name'   => '--json',
+                'description' => 'Send request data as JSON',
+                'action'      => 'StoreTrue',
+                'default'     => false,
+            )
+        );
     }
 
     protected function handleGenericOptions(
         \Console_CommandLine_Result $cmdRes, Request $req
     ) {
+        $this->handleOptJson($cmdRes, $req);
+
         if ($cmdRes->options['published'] !== null) {
             $req->req->addPostParameter(
                 'published', $cmdRes->options['published']
@@ -146,7 +162,7 @@ class Command_AbstractProps
             $postParams = [];
             foreach ($cmdRes->options['x'] as $xproperty) {
                 list($propkey, $propval) = explode('=', $xproperty, 2);
-                if (!isset($postParams[$propkey] )) {
+                if (!isset($postParams[$propkey])) {
                     $postParams[$propkey] = [];
                 }
                 $postParams[$propkey][] = $propval;
@@ -155,6 +171,12 @@ class Command_AbstractProps
                 $req->addPostParameter($propkey, $propvals);
             }
         }
+    }
+
+    protected function handleOptJson(
+        \Console_CommandLine_Result $cmdRes, Request $req
+    ) {
+        $req->setSendAsJson($cmdRes->options['json']);
     }
 
     protected function handleFiles(

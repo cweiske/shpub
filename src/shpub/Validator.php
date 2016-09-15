@@ -35,7 +35,7 @@ class Validator
         if (false === array_search($answer, $allowed)) {
             Log::err(
                 'Invalid RSVP answer given; allowed are: '
-                . implode (', ', $allowed)
+                . implode(', ', $allowed)
             );
             return false;
         }

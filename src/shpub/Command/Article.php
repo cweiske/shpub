@@ -38,14 +38,14 @@ class Command_Article extends Command_AbstractProps
     public function run(\Console_CommandLine_Result $cmdRes)
     {
         $req = new Request($this->cfg->host, $this->cfg);
-        $req->req->addPostParameter('h', 'entry');
-        $req->req->addPostParameter('name', $cmdRes->args['title']);
+        $req->setType('entry');
+        $req->addProperty('name', $cmdRes->args['title']);
         if ($cmdRes->options['html']) {
-            $req->req->addPostParameter(
-                'content[html]', $cmdRes->args['text']
+            $req->addProperty(
+                'content', ['html' => $cmdRes->args['text']]
             );
         } else {
-            $req->req->addPostParameter('content', $cmdRes->args['text']);
+            $req->addProperty('content', $cmdRes->args['text']);
         }
         $this->handleGenericOptions($cmdRes, $req);
 

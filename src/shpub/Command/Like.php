@@ -24,8 +24,8 @@ class Command_Like extends Command_AbstractProps
         }
 
         $req = new Request($this->cfg->host, $this->cfg);
-        $req->req->addPostParameter('h', 'entry');
-        $req->req->addPostParameter('like-of', $url);
+        $req->setType('entry');
+        $req->addProperty('like-of', $url);
 
         $this->handleGenericOptions($cmdRes, $req);
         $res = $req->send();

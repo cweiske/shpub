@@ -20,8 +20,8 @@ class Command_Note extends Command_AbstractProps
     public function run(\Console_CommandLine_Result $cmdRes)
     {
         $req = new Request($this->cfg->host, $this->cfg);
-        $req->req->addPostParameter('h', 'entry');
-        $req->req->addPostParameter('content', $cmdRes->args['text']);
+        $req->setType('entry');
+        $req->addProperty('content', $cmdRes->args['text']);
         $this->handleGenericOptions($cmdRes, $req);
 
         $res = $req->send();

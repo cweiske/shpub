@@ -32,9 +32,9 @@ class Command_Reply extends Command_AbstractProps
         }
 
         $req = new Request($this->cfg->host, $this->cfg);
-        $req->req->addPostParameter('h', 'entry');
-        $req->req->addPostParameter('content', implode(' ', $cmdRes->args['text']));
-        $req->req->addPostParameter('in-reply-to', $url);
+        $req->setType('entry');
+        $req->addProperty('content', implode(' ', $cmdRes->args['text']));
+        $req->addProperty('in-reply-to', $url);
 
         $this->handleGenericOptions($cmdRes, $req);
         $res = $req->send();
