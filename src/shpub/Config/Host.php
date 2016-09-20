@@ -52,7 +52,7 @@ class Config_Host
             if ($this->token) {
                 $this->endpoints->discoverMedia($this->token);
             }
-            //$this->endpoints->save($this->server);
+            $this->endpoints->save($this->server);
         }
     }
 }
