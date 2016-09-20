@@ -49,7 +49,10 @@ class Config_Host
         $this->endpoints->load($this->server);
         if ($this->endpoints->incomplete()) {
             $this->endpoints->discover($this->server);
-            $this->endpoints->save($this->server);
+            if ($this->token) {
+                $this->endpoints->discoverMedia($this->token);
+            }
+            //$this->endpoints->save($this->server);
         }
     }
 }

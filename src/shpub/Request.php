@@ -5,8 +5,10 @@ class Request
 {
     public $req;
     public $cfg;
+    public $host;
 
     protected $sendAsJson = false;
+    protected $directUpload = false;
     protected $uploadsInfo = [];
     protected $dedicatedBody = false;
 
@@ -17,16 +19,25 @@ class Request
 
     public function __construct($host, $cfg)
     {
-        $this->cfg = $cfg;
-        $this->req = new MyHttpRequest2($host->endpoints->micropub, 'POST');
-        $this->req->setHeader('User-Agent: shpub');
+        $this->cfg  = $cfg;
+        $this->host = $host;
+        $this->req = $this->getHttpRequest(
+            $this->host->endpoints->micropub, $this->host->token
+        );
+    }
+
+    protected function getHttpRequest($url, $accessToken)
+    {
+        $req = new MyHttpRequest2($url, 'POST');
+        $req->setHeader('User-Agent: shpub');
         if (version_compare(PHP_VERSION, '5.6.0', '<')) {
             //correct ssl validation on php 5.5 is a pain, so disable
-            $this->req->setConfig('ssl_verify_host', false);
-            $this->req->setConfig('ssl_verify_peer', false);
+            $req->setConfig('ssl_verify_host', false);
+            $req->setConfig('ssl_verify_peer', false);
         }
-        $this->req->setHeader('Content-type', 'application/x-www-form-urlencoded');
-        $this->req->setHeader('authorization', 'Bearer ' . $host->token);
+        $req->setHeader('Content-type', 'application/x-www-form-urlencoded');
+        $req->setHeader('authorization', 'Bearer ' . $accessToken);
+        return $req;
     }
 
     public function send($body = null)
@@ -79,7 +90,8 @@ class Request
             $this->req->setBody($body);
         }
         if ($this->cfg->debug) {
-            $this->printCurl();
+            $cp = new CurlPrinter();
+            $cp->show($this->req, $this->uploadsInfo, $this->dedicatedBody);
         }
         $res = $this->req->send();
 
@@ -109,17 +121,68 @@ class Request
     }
 
     /**
-     * @param string                $fieldName name of file-upload field
-     * @param string|resource|array $filename  full name of local file,
-     *               pointer to open file or an array of files
+     * @param string $fieldName name of file-upload field
+     * @param array  $fileNames list of local file paths
      */
-    public function addUpload($fieldName, $filename)
+    public function addUpload($fieldName, $fileNames)
     {
-        if ($this->sendAsJson) {
-            throw new \Exception('File uploads do not work with JSON');
+        if ($this->host->endpoints->media === null
+            || $this->directUpload
+        ) {
+            if ($this->sendAsJson) {
+                throw new \Exception(
+                    'No media endpoint available, which is required for JSON'
+                );
+            }
+            if (count($fileNames) == 1) {
+                $fileNames = reset($fileNames);
+            }
+            $this->uploadsInfo[$fieldName] = $fileNames;
+            return $this->req->addUpload($fieldName, $fileNames);
         }
-        $this->uploadsInfo[$fieldName] = $filename;
-        return $this->req->addUpload($fieldName, $filename);
+
+        $urls = [];
+        foreach ($fileNames as $fileName) {
+            $urls[] = $this->uploadToMediaEndpoint($fileName);
+        }
+        if (count($urls) == 1) {
+            $urls = reset($urls);
+        }
+        $this->addProperty($fieldName, $urls);
+    }
+
+    /**
+     * @return string URL at media endpoint
+     */
+    protected function uploadToMediaEndpoint($fileName)
+    {
+        $httpReq = $this->getHttpRequest(
+            $this->host->endpoints->media, $this->host->token
+        );
+        $httpReq->addUpload('file', $fileName);
+
+        if ($this->cfg->debug) {
+            $cp = new CurlPrinter();
+            $cp->show($httpReq, ['file' => $fileName]);
+        }
+        $res = $httpReq->send();
+        if (intval($res->getStatus() / 100) != 2) {
+            Log::err(
+                'Media endpoint returned an error status code '
+                . $res->getStatus()
+            );
+            Log::err($res->getBody());
+            exit(11);
+        }
+
+        $location = $res->getHeader('location');
+        if ($location === null) {
+            Log::err('Media endpoint did not return a URL');
+            exit(11);
+        }
+
+        $base = new \Net_URL2($this->host->endpoints->media);
+        return (string) $base->resolve($location);
     }
 
     public function addContent($text, $isHtml)
@@ -145,61 +208,13 @@ class Request
         $this->properties[$key] = (array) $values;
     }
 
-    protected function printCurl()
-    {
-        $command = 'curl';
-        if ($this->req->getMethod() != 'GET') {
-            $command .= ' -X ' . $this->req->getMethod();
-        }
-        foreach ($this->req->getHeaders() as $key => $val) {
-            $caseKey = implode('-', array_map('ucfirst', explode('-', $key)));
-            $command .= ' -H ' . escapeshellarg($caseKey . ': ' . $val);
-        }
-
-        $postParams = $this->req->getPostParams();
-
-        if (count($this->uploadsInfo) == 0) {
-            foreach ($postParams as $k => $v) {
-                if (!is_array($v)) {
-                    $command .= ' -d ' . escapeshellarg($k . '=' . $v);
-                } else {
-                    foreach ($v as $ak => $av) {
-                        $command .= ' -d ' . escapeshellarg(
-                            $k . '[' . $ak . ']=' . $av
-                        );
-                    }
-                }
-            }
-        } else {
-            foreach ($postParams as $k => $v) {
-                $command .= ' -F ' . escapeshellarg($k . '=' . $v);
-            }
-            foreach ($this->uploadsInfo as $fieldName => $filename) {
-                if (!is_array($filename)) {
-                    $command .= ' -F ' . escapeshellarg(
-                        $fieldName . '=@' . $filename
-                    );
-                } else {
-                    foreach ($filename as $k => $realFilename) {
-                        $command .= ' -F ' . escapeshellarg(
-                            $fieldName . '[' . $k . ']=@' . $realFilename
-                        );
-                    }
-                }
-            }
-        }
-
-        if ($this->dedicatedBody) {
-            $command .= ' --data ' . escapeshellarg($this->req->getBody());
-        }
-
-        $command .= ' ' . escapeshellarg((string) $this->req->getUrl());
-
-        Log::msg($command);
-    }
-
     public function setSendAsJson($json)
     {
         $this->sendAsJson = $json;
+    }
+
+    public function setDirectUpload($directUpload)
+    {
+        $this->directUpload = $directUpload;
     }
 }

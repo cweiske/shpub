@@ -41,6 +41,15 @@ class Command_AbstractProps
             )
         );
         $cmd->addOption(
+            'direct_upload',
+            array(
+                'long_name'   => '--direct-upload',
+                'description' => 'Ignore media endpoint at file upload',
+                'action'      => 'StoreTrue',
+                'default'     => false,
+            )
+        );
+        $cmd->addOption(
             'name',
             array(
                 'short_name'  => '-n',
@@ -170,6 +179,7 @@ class Command_AbstractProps
             );
         }
 
+        $req->setDirectUpload($cmdRes->options['direct_upload']);
         $this->handleFiles($cmdRes, $req);
 
         if (count($cmdRes->options['x'])) {
@@ -232,24 +242,15 @@ class Command_AbstractProps
             if ($type == 'image') {
                 $type = 'photo';
             }
-            if (count($urls) == 1) {
-                $req->req->addPostParameter($type, reset($urls));
-            } else if (count($urls) > 1) {
-                $n = 0;
-                foreach ($urls as $url) {
-                    $req->req->addPostParameter(
-                        $type . '[' . $n++ . ']', $url
-                    );
-                }
+            if (count($urls) > 0) {
+                $req->addProperty($type, $urls);
             }
         }
         foreach ($fileList as $type => $filePaths) {
             if ($type == 'image') {
                 $type = 'photo';
             }
-            if (count($filePaths) == 1) {
-                $req->addUpload($type, reset($filePaths));
-            } else if (count($filePaths) > 0) {
+            if (count($filePaths) > 0) {
                 $req->addUpload($type, $filePaths);
             }
         }

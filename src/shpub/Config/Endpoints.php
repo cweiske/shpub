@@ -86,6 +86,44 @@ class Config_Endpoints
         );
     }
 
+    public function discoverMedia($accessToken)
+    {
+        $configUrl = $this->micropub;
+        if (strpos($configUrl, '?') === false) {
+            $configUrl .= '?q=config';
+        } else {
+            $configUrl .= '&q=config';
+        }
+
+        $ctx = stream_context_create(
+            [
+                'http' => [
+                    'header' => [
+                        'Accept: application/json',
+                        'Authorization: Bearer ' . $accessToken
+                    ],
+                ]
+            ]
+        );
+        $json = @file_get_contents($configUrl, false, $ctx);
+        if ($json === false) {
+            //does not exist
+            return;
+        }
+        $configData = json_decode($json);
+        if ($configData === null) {
+            //json could not be decoded
+            Log::err('micropub configuration is invalid');
+            return;
+        }
+        if (isset($configData->{'media-endpoint'})) {
+            $configUrlObj = new \Net_URL2($configUrl);
+            $this->media = (string) $configUrlObj->resolve(
+                $configData->{'media-endpoint'}
+            );
+        }
+    }
+
     public function load($server)
     {
         $file = $this->getCacheFilePath($server, false);
