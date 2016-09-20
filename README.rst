@@ -1,16 +1,37 @@
 **************************************
 shpub - micropub client for your shell
 **************************************
-Command line micropub client written in PHP.
+Command line `micropub <https://micropub.net/>`_ client written in PHP.
 
 
-=====
-Usage
-=====
+.. contents::
 
+========
+Download
+========
+The `github releases page <https://github.com/cweiske/shpub/releases>`_
+has self-contained ``.phar`` files that have all dependencies included.
+
+
+Dependencies
+============
+When using the git version, you need to have the following dependencies
+installed on your system:
+
+- PHP 5.4+
+- PEAR's `HTTP_Request2 <http://pear.php.net/package/HTTP_Request2>`_
+- PEAR's `MIME_Type <http://pear.php.net/package/MIME_Type>`_
+- PEAR's `NET_URL2 <http://pear.php.net/package/Net_URL2>`_
+
+
+=============
 Initial setup
 =============
 ::
+
+    $ ./bin/shpub.php connect http://mywebsite
+
+Different user::
 
     $ ./bin/shpub.php connect http://mywebsite http://mywebsite/user
 
@@ -28,7 +49,24 @@ List configured servers/connections
     anoweco.bogo
     local2
 
-Also try ``-v`` which lists server and user URLs.
+Also try ``server -v`` which lists server and user URLs.
+
+
+=============
+Post creation
+=============
+shpub has support for the following post types:
+
+- `article <http://indieweb.org/article>`_
+- `bookmark <http://indieweb.org/bookmark>`_
+- `like <http://indieweb.org/like>`_
+- `note <http://indieweb.org/note>`_
+- `reply <http://indieweb.org/reply>`_
+- `repost <http://indieweb.org/repost>`_
+- `rsvp <http://indieweb.org/rsvp>`_
+
+``shpub`` sends data form-encoded by default.
+To send JSON requests, use the ``--json`` option.
 
 
 Create a like
@@ -53,19 +91,107 @@ Create a note
 A normal note::
 
     $ ./bin/shpub.php note "oh this is cool!"
-    Reply created at server
+    Note created at server
     http://known.bogo/2016/oh-this-is-cool.htm
 
 Note with an image::
 
     $ ./bin/shpub.php note -f image.jpg "this is so cute"
-    Reply created at server
-    http://known.bogo/2016/this-is-so-cute.htm
+    Note created at server
+    http://known.bogo/2016/this-is-so-cute
 
 You can use ``-f`` several times to upload multiple files.
 
 URL image upload::
 
     $ ./bin/shpub.php note -f http://example.org/1.jpg "img url!"
-    Reply created at server
-    http://known.bogo/2016/img-url.htm
+    Note created at server
+    http://known.bogo/2016/img-url
+
+
+===============
+Delete/Undelete
+===============
+You may delete and restore posts on micropub servers::
+
+    $ ./bin/shpub.php delete http://known.bogo/2016/like
+
+Restore a deleted post::
+
+    $ ./bin/shpub.php undelete http://known.bogo/2016/like
+
+
+=======
+Updates
+=======
+Existing posts can be modified if the `server supports this`__::
+
+    $ ./bin/shpub update --add category=foo category=bar\
+                         --replace slug=differentslug\
+                         --delete category=oldcat\
+                         http://known.bogo/2016/post
+
+__ https://indieweb.org/Micropub/Servers#Implementation_status
+
+
+============
+File uploads
+============
+Most post types allow file uploads. Simply use ``-f``::
+
+    $ ./bin/shpub.php note -f path/to/image.jpg "image test"
+    Note created at server
+    http://known.bogo/2016/image-test
+
+The media endpoint is used automatically if the micropub endpoint has one.
+To force shpub to directly upload the file and skip the media endpoint,
+use the ``--direct-upload`` option::
+
+    $ ./bin/shpub.php note --direct-upload -f path/to/image.jpg "direct upload"
+
+Use the ``upload`` command to upload files to the media endpoint without
+creating a post::
+
+    $ ./bin/shpub.php upload /path/to/file.jpg /path/to/file2.jpg
+    Uploaded file /path/to/file.jpg
+    http://test.bogo/micropub-media-endpoint/1474362040.2941/file.jpg
+    Uploaded file /path/to/file2.jpg
+    http://test.bogo/micropub-media-endpoint/1474362040.3383/file2.jpg
+
+
+=========
+Debugging
+=========
+To debug ``shpub`` or your micropub endpoint, use the ``--debug`` option
+to see ``curl`` command equivalents to the shpub HTTP requests::
+
+    $ ./bin/shpub.php -s known -d note "a simple note"
+    curl -X POST -H 'User-Agent: shpub' -H 'Content-Type: application/x-www-form-urlencoded' -H 'Authorization: Bearer abc' -d 'h=entry' -d 'content=a simple note' 'http://known.bogo/micropub/endpoint'
+    Post created at server
+    http://known.bogo/2016/a-simple-note
+
+
+===========
+About shpub
+===========
+
+Source code
+===========
+shpub's source code is available from http://git.cweiske.de/shpub.git
+or the `mirror on github`__.
+
+__ https://github.com/cweiske/shpub
+
+
+License
+=======
+shpub is licensed under the `AGPL v3 or later`__.
+
+__ http://www.gnu.org/licenses/agpl.html
+
+
+Author
+======
+shpub was written by `Christian Weiske`__.
+
+__ http://cweiske.de/
