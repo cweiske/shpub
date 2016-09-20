@@ -17,6 +17,7 @@ class Command_Connect
     public static function opts(\Console_CommandLine $optParser)
     {
         $cmd = $optParser->addCommand('connect');
+        $cmd->description = 'Obtain access token from a micropub server';
         $cmd->addOption(
             'force',
             array(

@@ -6,6 +6,7 @@ class Command_Reply extends Command_AbstractProps
     public static function opts(\Console_CommandLine $optParser)
     {
         $cmd = $optParser->addCommand('reply');
+        $cmd->description = 'Create a reply';
         static::addOptHtml($cmd);
         static::optsGeneric($cmd);
         $cmd->addArgument(

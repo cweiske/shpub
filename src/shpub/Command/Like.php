@@ -6,6 +6,7 @@ class Command_Like extends Command_AbstractProps
     public static function opts(\Console_CommandLine $optParser)
     {
         $cmd = $optParser->addCommand('like');
+        $cmd->description = 'Create a like';
         static::optsGeneric($cmd);
         $cmd->addArgument(
             'url',

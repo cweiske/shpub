@@ -6,6 +6,7 @@ class Command_Bookmark extends Command_AbstractProps
     public static function opts(\Console_CommandLine $optParser)
     {
         $cmd = $optParser->addCommand('bookmark');
+        $cmd->description = 'Create a bookmark';
         static::addOptHtml($cmd);
         static::optsGeneric($cmd);
         $cmd->addArgument(

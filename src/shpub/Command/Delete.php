@@ -6,6 +6,7 @@ class Command_Delete extends Command_AbstractProps
     public static function opts(\Console_CommandLine $optParser)
     {
         $cmd = $optParser->addCommand('delete');
+        $cmd->description = 'Delete an existing post';
         static::addOptJson($cmd);
         $cmd->addArgument(
             'url',

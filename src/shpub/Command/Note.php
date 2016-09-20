@@ -6,6 +6,7 @@ class Command_Note extends Command_AbstractProps
     public static function opts(\Console_CommandLine $optParser)
     {
         $cmd = $optParser->addCommand('note');
+        $cmd->description = 'Create a note';
         static::addOptHtml($cmd);
         static::optsGeneric($cmd);
         $cmd->addArgument(

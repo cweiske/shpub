@@ -6,6 +6,7 @@ class Command_Update extends Command_AbstractProps
     public static function opts(\Console_CommandLine $optParser)
     {
         $cmd = $optParser->addCommand('update');
+        $cmd->description = 'Modify an existing post';
         $cmd->addOption(
             'add',
             array(

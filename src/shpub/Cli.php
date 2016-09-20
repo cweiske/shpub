@@ -89,8 +89,9 @@ class Cli
     protected function loadOptParser()
     {
         $optParser = new \Console_CommandLine();
-        $optParser->description = 'shpub';
-        $optParser->version = '0.1.0';
+        $optParser->name        = 'shpub';
+        $optParser->description = 'Command line micropub client';
+        $optParser->version     = '0.1.0';
         $optParser->subcommand_required = true;
 
         $optParser->addOption(

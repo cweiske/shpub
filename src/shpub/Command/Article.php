@@ -6,6 +6,7 @@ class Command_Article extends Command_AbstractProps
     public static function opts(\Console_CommandLine $optParser)
     {
         $cmd = $optParser->addCommand('article');
+        $cmd->description = 'Create an article';
         static::addOptHtml($cmd);
         static::optsGeneric($cmd);
         $cmd->addArgument(

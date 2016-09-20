@@ -6,6 +6,7 @@ class Command_Undelete extends Command_AbstractProps
     public static function opts(\Console_CommandLine $optParser)
     {
         $cmd = $optParser->addCommand('undelete');
+        $cmd->description = 'Restore a deleted post';
         static::addOptJson($cmd);
         $cmd->addArgument(
             'url',

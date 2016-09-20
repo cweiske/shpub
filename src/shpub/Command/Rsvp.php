@@ -9,6 +9,7 @@ class Command_Rsvp extends Command_AbstractProps
     public static function opts(\Console_CommandLine $optParser)
     {
         $cmd = $optParser->addCommand('rsvp');
+        $cmd->description = 'Create a reservation';
         static::addOptHtml($cmd);
         static::optsGeneric($cmd);
         $cmd->addArgument(

@@ -6,6 +6,7 @@ class Command_Repost extends Command_AbstractProps
     public static function opts(\Console_CommandLine $optParser)
     {
         $cmd = $optParser->addCommand('repost');
+        $cmd->description = 'Create a repost';
         static::optsGeneric($cmd);
         $cmd->addArgument(
             'url',
