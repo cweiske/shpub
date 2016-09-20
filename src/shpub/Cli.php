@@ -130,6 +130,8 @@ class Cli
         Command_Undelete::opts($optParser);
         Command_Update::opts($optParser);
 
+        Command_Upload::opts($optParser);
+
         return $optParser;
     }
 

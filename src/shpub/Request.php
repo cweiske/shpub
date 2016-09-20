@@ -154,7 +154,7 @@ class Request
     /**
      * @return string URL at media endpoint
      */
-    protected function uploadToMediaEndpoint($fileName)
+    public function uploadToMediaEndpoint($fileName)
     {
         $httpReq = $this->getHttpRequest(
             $this->host->endpoints->media, $this->host->token
