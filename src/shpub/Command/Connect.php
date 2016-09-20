@@ -14,6 +14,42 @@ class Command_Connect
         $this->cfg = $cfg;
     }
 
+    public static function opts(\Console_CommandLine $optParser)
+    {
+        $cmd = $optParser->addCommand('connect');
+        $cmd->addOption(
+            'force',
+            array(
+                'short_name'  => '-f',
+                'long_name'   => '--force-update',
+                'description' => 'Force token update if token already available',
+                'action'      => 'StoreTrue',
+                'default'     => false,
+            )
+        );
+        $cmd->addArgument(
+            'server',
+            [
+                'optional'    => false,
+                'description' => 'Server URL',
+            ]
+        );
+        $cmd->addArgument(
+            'user',
+            [
+                'optional'    => true,
+                'description' => 'User URL',
+            ]
+        );
+        $cmd->addArgument(
+            'key',
+            [
+                'optional'    => true,
+                'description' => 'Short name (key)',
+            ]
+        );
+    }
+
     public function run($server, $user, $newKey, $force)
     {
         $server = Validator::url($server, 'server');

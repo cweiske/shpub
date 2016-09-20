@@ -115,50 +115,8 @@ class Cli
             )
         );
 
-        $cmd = $optParser->addCommand('connect');
-        $cmd->addOption(
-            'force',
-            array(
-                'short_name'  => '-f',
-                'long_name'   => '--force-update',
-                'description' => 'Force token update if token already available',
-                'action'      => 'StoreTrue',
-                'default'     => false,
-            )
-        );
-        $cmd->addArgument(
-            'server',
-            [
-                'optional'    => false,
-                'description' => 'Server URL',
-            ]
-        );
-        $cmd->addArgument(
-            'user',
-            [
-                'optional'    => true,
-                'description' => 'User URL',
-            ]
-        );
-        $cmd->addArgument(
-            'key',
-            [
-                'optional'    => true,
-                'description' => 'Short name (key)',
-            ]
-        );
-
-        $cmd = $optParser->addCommand('server');
-        $cmd->addOption(
-            'verbose',
-            array(
-                'short_name'  => '-v',
-                'long_name'   => '--verbose',
-                'description' => 'Show more server infos',
-                'action'      => 'StoreTrue',
-                'default'     => false,
-            )
-        );
+        Command_Connect::opts($optParser);
+        Command_Server::opts($optParser);
 
         Command_Article::opts($optParser);
         Command_Note::opts($optParser);
