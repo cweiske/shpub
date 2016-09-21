@@ -94,7 +94,7 @@ class Command_AbstractProps
         $cmd->addOption(
             'syndication',
             array(
-                'short_name'  => '-s',
+                'short_name'  => '-u',
                 'long_name'   => '--syndication',
                 'description' => 'Syndication URL(s)',
                 'help_name'   => 'URL',
@@ -121,7 +121,6 @@ class Command_AbstractProps
         $cmd->addOption(
             'html',
             array(
-                'short_name'  => '-h',
                 'long_name'   => '--html',
                 'description' => 'Text content is HTML',
                 'action'      => 'StoreTrue',
@@ -149,32 +148,32 @@ class Command_AbstractProps
         $this->handleOptJson($cmdRes, $req);
 
         if ($cmdRes->options['published'] !== null) {
-            $req->req->addPostParameter(
+            $req->addProperty(
                 'published', $cmdRes->options['published']
             );
         }
         if ($cmdRes->options['updated'] !== null) {
-            $req->req->addPostParameter(
+            $req->addProperty(
                 'updated', $cmdRes->options['updated']
             );
         }
         if (count($cmdRes->options['categories'])) {
-            $req->addPostParameter(
+            $req->addProperty(
                 'category', $cmdRes->options['categories']
             );
         }
         if ($cmdRes->options['name'] !== null) {
-            $req->req->addPostParameter(
+            $req->addProperty(
                 'name', $cmdRes->options['name']
             );
         }
         if ($cmdRes->options['slug'] !== null) {
-            $req->req->addPostParameter(
+            $req->addProperty(
                 'slug', $cmdRes->options['slug']
             );
         }
         if (count($cmdRes->options['syndication'])) {
-            $req->addPostParameter(
+            $req->addProperty(
                 'syndication', $cmdRes->options['syndication']
             );
         }
@@ -192,7 +191,7 @@ class Command_AbstractProps
                 $postParams[$propkey][] = $propval;
             }
             foreach ($postParams as $propkey => $propvals) {
-                $req->addPostParameter($propkey, $propvals);
+                $req->addProperty($propkey, $propvals);
             }
         }
     }
