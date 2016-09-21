@@ -1,3 +1,8 @@
+2016-09-21  Christian Weiske  <cweiske@cweiske.de>
+
+	* Fix generic post options
+	* Version 0.2.1
+
 2016-09-20  Christian Weiske  <cweiske@cweiske.de>
 
 	* Support for media endpoints
