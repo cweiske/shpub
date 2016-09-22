@@ -215,8 +215,9 @@ class Command_AbstractProps
         foreach ($files as $filePath) {
             if (strpos($filePath, '://') !== false) {
                 //url
+                $urlPath  = parse_url($filePath, PHP_URL_PATH);
                 $mte      = new \MIME_Type_Extension();
-                $mimetype = $mte->getMIMEType($filePath);
+                $mimetype = $mte->getMIMEType($urlPath);
                 $media    = \MIME_Type::getMedia($mimetype);
                 if (!isset($urlList[$media])) {
                     Log::err('File type not allowed: ' . $mimetype);
