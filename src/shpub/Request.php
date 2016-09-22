@@ -96,13 +96,35 @@ class Request
         $res = $this->req->send();
 
         if (intval($res->getStatus() / 100) != 2) {
-            Log::err(
-                'Server returned an error status code ' . $res->getStatus()
-            );
-            Log::err($res->getBody());
-            exit(11);
+            $this->displayErrorResponse($res);
         }
         return $res;
+    }
+
+    protected function displayErrorResponse($res)
+    {
+        Log::err(
+            'Server returned an error status code ' . $res->getStatus()
+        );
+
+        $shown = false;
+        if ($res->getHeader('content-type') == 'application/json') {
+            $errData = json_decode($res->getBody());
+            if (!isset($errData->error)) {
+                Log::err('Error response does not contain "error" property');
+            } else if (isset($errData->error_description)) {
+                Log::err($errData->error . ': ' . $errData->error_description);
+                $shown = true;
+            } else {
+                Log::err($errData->error);
+                $shown = true;
+            }
+        }
+
+        if (!$shown) {
+            Log::err($res->getBody());
+        }
+        exit(11);
     }
 
     public function setAction($action)
