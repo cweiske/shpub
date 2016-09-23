@@ -9,8 +9,13 @@ Command line `micropub <https://micropub.net/>`_ client written in PHP.
 ========
 Download
 ========
-The `github releases page <https://github.com/cweiske/shpub/releases>`_
-has self-contained ``.phar`` files that have all dependencies included.
+shpub is released as self-contained ``.phar`` file that includes
+all dependencies.
+
+.. LATESTRELEASE
+
+See `shpub downloads page <http://cweiske.de/shpub-download.htm>`_
+for all released versions.
 
 
 Dependencies
@@ -174,6 +179,8 @@ to see ``curl`` command equivalents to the shpub HTTP requests::
 ===========
 About shpub
 ===========
+shpub's homepage is http://cweiske.de/shpub.htm
+
 
 Source code
 ===========
