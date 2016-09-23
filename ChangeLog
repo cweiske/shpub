@@ -1,3 +1,9 @@
+2016-09-23  Christian Weiske  <cweiske@cweiske.de>
+
+	* Improved URL file upload type detection
+	* Display JSON error messages nicely
+	* Version 0.3.0
+
 2016-09-21  Christian Weiske  <cweiske@cweiske.de>
 
 	* Fix generic post options

@@ -91,7 +91,7 @@ class Cli
         $optParser = new \Console_CommandLine();
         $optParser->name        = 'shpub';
         $optParser->description = 'Command line micropub client';
-        $optParser->version     = '0.2.1';
+        $optParser->version     = '0.3.0';
         $optParser->subcommand_required = true;
 
         $optParser->addOption(
