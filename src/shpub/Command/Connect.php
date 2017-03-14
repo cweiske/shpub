@@ -126,6 +126,7 @@ class Command_Connect
         $req->setBody(
             http_build_query(
                 [
+                    'grant_type'   => 'authorization_code',
                     'me'           => $userUrl,
                     'code'         => $code,
                     'redirect_uri' => $redirect_uri,
@@ -141,11 +142,14 @@ class Command_Connect
             Log::err($res->getBody());
             exit(2);
         }
-        if ($res->getHeader('content-type') != 'application/x-www-form-urlencoded') {
+        if ($res->getHeader('content-type') == 'application/x-www-form-urlencoded') {
+            parse_str($res->getBody(), $tokenParams);
+        } elseif ($res->getHeader('content-type') == 'application/json') {
+            $tokenParams = json_decode($res->getBody(), true);
+        } else {
             Log::err('Wrong content type in auth verification response');
             exit(2);
         }
-        parse_str($res->getBody(), $tokenParams);
         if (!isset($tokenParams['access_token'])) {
             Log::err('"access_token" missing');
             exit(2);
