@@ -28,6 +28,16 @@ class Command_Connect
                 'default'     => false,
             )
         );
+        $cmd->addOption(
+            'scope',
+            array(
+                'short_name'  => '-s',
+                'long_name'   => '--scope',
+                'description' => 'Space-separated list of scopes to request (default create)',
+                'action'      => 'StoreString',
+                'default'     => 'create',
+            )
+        );
         $cmd->addArgument(
             'server',
             [
@@ -51,7 +61,7 @@ class Command_Connect
         );
     }
 
-    public function run($server, $user, $newKey, $force)
+    public function run($server, $user, $newKey, $force, $scope)
     {
         $server = Validator::url($server, 'server');
         if ($user === null) {
@@ -75,7 +85,7 @@ class Command_Connect
         $state = time();
         Log::msg(
             "To authenticate, open the following URL:\n"
-            . $this->getBrowserAuthUrl($host, $user, $redirect_uri, $state)
+            . $this->getBrowserAuthUrl($host, $user, $redirect_uri, $state, $scope)
         );
 
         $authParams = $this->startHttpServer($socketStr);
@@ -126,6 +136,7 @@ class Command_Connect
         $req->setBody(
             http_build_query(
                 [
+                    'grant_type'   => 'authorization_code',
                     'me'           => $userUrl,
                     'code'         => $code,
                     'redirect_uri' => $redirect_uri,
@@ -141,11 +152,14 @@ class Command_Connect
             Log::err($res->getBody());
             exit(2);
         }
-        if ($res->getHeader('content-type') != 'application/x-www-form-urlencoded') {
+        if ($res->getHeader('content-type') == 'application/x-www-form-urlencoded') {
+            parse_str($res->getBody(), $tokenParams);
+        } elseif ($res->getHeader('content-type') == 'application/json') {
+            $tokenParams = json_decode($res->getBody(), true);
+        } else {
             Log::err('Wrong content type in auth verification response');
             exit(2);
         }
-        parse_str($res->getBody(), $tokenParams);
         if (!isset($tokenParams['access_token'])) {
             Log::err('"access_token" missing');
             exit(2);
@@ -155,14 +169,14 @@ class Command_Connect
         return $accessToken;
     }
 
-    protected function getBrowserAuthUrl($host, $user, $redirect_uri, $state)
+    protected function getBrowserAuthUrl($host, $user, $redirect_uri, $state, $scope)
     {
         return $host->endpoints->authorization
             . '?me=' . urlencode($user)
             . '&client_id=' . urlencode(static::$client_id)
             . '&redirect_uri=' . urlencode($redirect_uri)
             . '&state=' . $state
-            . '&scope=post'
+            . '&scope=' . urlencode($scope)
             . '&response_type=code';
     }
 

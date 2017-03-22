@@ -56,7 +56,7 @@ class Request
                 $data['url'] = $this->url;
             }
             if ($this->type !== null) {
-                $data['type'] = 'h-' . $this->type;
+                $data['type'] = array('h-' . $this->type);
             }
             if (count($this->properties)) {
                 $data['properties'] = $this->properties;
@@ -148,7 +148,13 @@ class Request
      */
     public function addUpload($fieldName, $fileNames)
     {
-        if ($this->host->endpoints->media === null
+        if($this->directUpload && $this->sendAsJson) {
+            throw new \Exception(
+                'Cannot do direct upload with JSON requests'
+            );
+        }
+
+        if ($this->host->endpoints->media == null
             || $this->directUpload
         ) {
             if ($this->sendAsJson) {

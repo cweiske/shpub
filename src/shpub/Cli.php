@@ -24,7 +24,8 @@ class Cli
                     $res->command->args['server'],
                     $res->command->args['user'],
                     $res->command->args['key'],
-                    $res->command->options['force']
+                    $res->command->options['force'],
+                    $res->command->options['scope']
                 );
                 break;
 
