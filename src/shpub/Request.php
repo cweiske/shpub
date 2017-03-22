@@ -148,7 +148,13 @@ class Request
      */
     public function addUpload($fieldName, $fileNames)
     {
-        if ($this->host->endpoints->media === null
+        if($this->directUpload && $this->sendAsJson) {
+            throw new \Exception(
+                'Cannot do direct upload with JSON requests'
+            );
+        }
+
+        if ($this->host->endpoints->media == null
             || $this->directUpload
         ) {
             if ($this->sendAsJson) {
