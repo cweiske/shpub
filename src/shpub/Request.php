@@ -56,7 +56,7 @@ class Request
                 $data['url'] = $this->url;
             }
             if ($this->type !== null) {
-                $data['type'] = 'h-' . $this->type;
+                $data['type'] = array('h-' . $this->type);
             }
             if (count($this->properties)) {
                 $data['properties'] = $this->properties;
