@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ruleset name="shpub">
+ <description>PEAR coding standard + some changes</description>
+
+ <file>src/</file>
+
+ <!-- Include the whole PEAR standard -->
+ <rule ref="PEAR">
+  <exclude name="PEAR.Commenting.FileComment.Missing"/>
+  <exclude name="PEAR.Commenting.ClassComment.Missing"/>
+  <exclude name="PEAR.Commenting.FunctionComment.Missing"/>
+
+  <exclude name="PEAR.Commenting.ClassComment.MissingCategoryTag"/>
+  <exclude name="PEAR.Commenting.ClassComment.MissingPackageTag"/>
+
+  <exclude name="PEAR.Commenting.FileComment.MissingCategoryTag"/>
+  <exclude name="PEAR.Commenting.FileComment.MissingPackageTag"/>
+
+  <exclude name="Generic.Commenting.DocComment.MissingShort"/>
+ </rule>
+
+</ruleset>
