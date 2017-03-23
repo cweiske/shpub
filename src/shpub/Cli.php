@@ -50,7 +50,7 @@ class Cli
     /**
      * Let the CLI option parser parse the options.
      *
-     * @param object $parser Option parser
+     * @param object $optParser Option parser
      *
      * @return object Parsed command line parameters
      */

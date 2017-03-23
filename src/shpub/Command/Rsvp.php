@@ -3,6 +3,10 @@ namespace shpub;
 
 /**
  * Repondez s'il vous plait - an answer to an invitation
+ *
+ * @author  Christian Weiske <cweiske@cweiske.de>
+ * @license http://www.gnu.org/licenses/agpl.html GNU AGPL v3
+ * @link    http://cweiske.de/shpub.htm
  */
 class Command_Rsvp extends Command_AbstractProps
 {

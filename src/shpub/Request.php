@@ -143,8 +143,12 @@ class Request
     }
 
     /**
+     * Add file upload
+     *
      * @param string $fieldName name of file-upload field
      * @param array  $fileNames list of local file paths
+     *
+     * @return void
      */
     public function addUpload($fieldName, $fileNames)
     {
@@ -180,6 +184,10 @@ class Request
     }
 
     /**
+     * Execute the file upload
+     *
+     * @param string $fileName File path
+     *
      * @return string URL at media endpoint
      */
     public function uploadToMediaEndpoint($fileName)
@@ -230,6 +238,8 @@ class Request
      *
      * @param string       $key    Parameter name
      * @param string|array $values One or multiple values
+     *
+     * @return void
      */
     public function addProperty($key, $values)
     {

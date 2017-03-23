@@ -2,8 +2,13 @@
 namespace shpub;
 
 /**
- * @link http://micropub.net/draft/
- * @link http://indieweb.org/authorization-endpoint
+ * Connect to a micropub server to get an access token.
+ *
+ * @author  Christian Weiske <cweiske@cweiske.de>
+ * @license http://www.gnu.org/licenses/agpl.html GNU AGPL v3
+ * @link    http://cweiske.de/shpub.htm
+ * @link    http://micropub.net/draft/
+ * @link    http://indieweb.org/authorization-endpoint
  */
 class Command_Connect
 {
@@ -33,7 +38,8 @@ class Command_Connect
             array(
                 'short_name'  => '-s',
                 'long_name'   => '--scope',
-                'description' => 'Space-separated list of scopes to request (default create)',
+                'description' => 'Space-separated list of scopes to request'
+                    . ' (default: create)',
                 'action'      => 'StoreString',
                 'default'     => 'create',
             )

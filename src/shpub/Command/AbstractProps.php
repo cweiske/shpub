@@ -3,6 +3,10 @@ namespace shpub;
 
 /**
  * Abstract command class that handles generic properties
+ *
+ * @author  Christian Weiske <cweiske@cweiske.de>
+ * @license http://www.gnu.org/licenses/agpl.html GNU AGPL v3
+ * @link    http://cweiske.de/shpub.htm
  */
 class Command_AbstractProps
 {
