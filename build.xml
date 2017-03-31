@@ -56,6 +56,7 @@
   <pearPackageFileset id="dep-MIME_Type" package="pear.php.net/MIME_Type"/>
   <pearPackageFileset id="dep-Net_URL2" package="pear.php.net/Net_URL2"/>
   <pearPackageFileset id="dep-PEAR" package="pear.php.net/PEAR">
+   <include name="PEAR.php"/>
    <include name="PEAR/Exception.php"/>
   </pearPackageFileset>
 
