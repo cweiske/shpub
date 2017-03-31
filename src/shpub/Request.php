@@ -225,7 +225,7 @@ class Request
     {
         if ($isHtml) {
             $this->addProperty(
-                'content', ['html' => $text]
+                'content', [['html' => $text]]
             );
         } else {
             $this->addProperty('content', $text);
