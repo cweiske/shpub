@@ -119,6 +119,7 @@ class Cli
 
         Command_Connect::opts($optParser);
         Command_Server::opts($optParser);
+        Command_Targets::opts($optParser);
 
         Command_Article::opts($optParser);
         Command_Note::opts($optParser);
