@@ -1,3 +1,15 @@
+2017-04-01  Christian Weiske  <cweiske@cweiske.de>
+
+	* New command: (syndication) targets
+	* Add JSON auth response handling (aaronpk)
+	* Add scope parameter to connect command (aaronpk)
+	* Fix authentication: Send grant_type (aaronpk)
+	* Fix JSON "type" format (aaronpk)
+	* Fix JSON HTML content format
+	* Fix RSVP type (aaronpk)
+	* Fix missing PEAR.php in .phar
+	* Version 0.4.0
+
 2016-09-23  Christian Weiske  <cweiske@cweiske.de>
 
 	* Improved URL file upload type detection

@@ -139,6 +139,19 @@ Existing posts can be modified if the `server supports this`__::
 __ https://indieweb.org/Micropub/Servers#Implementation_status
 
 
+===================
+Syndication targets
+===================
+You may list the syndication targets defined on the server::
+
+    $ ./bin/shpub.php targets
+    IndieNews
+     https://news.indieweb.org/en
+
+Then specify it when creating a post::
+
+    $ ./bin/shpub.php article -x mp-syndicate-to=https://news.indieweb.org/en title text
+
 ============
 File uploads
 ============
