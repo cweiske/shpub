@@ -108,7 +108,7 @@ class Request
         );
 
         $shown = false;
-        if ($res->getHeader('content-type') == 'application/json') {
+        if (Util::getMimeType($res) == 'application/json') {
             $errData = json_decode($res->getBody());
             if (!isset($errData->error)) {
                 Log::err('Error response does not contain "error" property');

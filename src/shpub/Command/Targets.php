@@ -29,7 +29,7 @@ class Command_Targets
         $req->req->getUrl()->setQueryVariable('q', 'syndicate-to');
         $res = $req->send();
 
-        if ($res->getHeader('content-type') != 'application/json') {
+        if (Util::getMimeType($res) != 'application/json') {
             Log::err('response data are not of type application/json');
             exit(2);
         }

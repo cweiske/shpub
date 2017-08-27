@@ -158,9 +158,9 @@ class Command_Connect
             Log::err($res->getBody());
             exit(2);
         }
-        if ($res->getHeader('content-type') == 'application/x-www-form-urlencoded') {
+        if (Util::getMimeType($res) == 'application/x-www-form-urlencoded') {
             parse_str($res->getBody(), $tokenParams);
-        } elseif ($res->getHeader('content-type') == 'application/json') {
+        } elseif (Util::getMimeType($res) == 'application/json') {
             $tokenParams = json_decode($res->getBody(), true);
         } else {
             Log::err('Wrong content type in auth verification response');
