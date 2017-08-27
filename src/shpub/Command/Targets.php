@@ -36,7 +36,7 @@ class Command_Targets
 
         $data = json_decode($res->getBody(), true);
         if (!isset($data['syndicate-to'])) {
-            Log::err('"syndicate-to" property missing');
+            Log::err('"syndicate-to" property missing in server response');
             exit(2);
         }
 
