@@ -31,7 +31,10 @@
   </copy>
 
   <mkdir dir="${phing.dir}/dist"/>
-  <!-- <delete file="${pharfile}"/> -->
+
+  <available file="${pharfile}" property="phar_exists" value="1"/>
+  <fail if="phar_exists" message="File exists already: ${pharfile}"/>
+
   <pharpackage basedir="${phing.dir}"
    destfile="${pharfile}"
    stub="${phing.dir}/src/phar-stub.php"
