@@ -1,5 +1,10 @@
 2017-08-28  Christian Weiske  <cweiske@cweiske.de>
 
+	* Fix version output: Show correct version
+	* Version 0.5.1
+
+2017-08-28  Christian Weiske  <cweiske@cweiske.de>
+
 	* Add connection detail mode to "server" command
 	* Fix HTTP response content type header parsing
 	* Fix execution when filename has no ".phar" extension

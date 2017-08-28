@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project name="shpub" default="phar" basedir=".">
 
- <property name="version"  value="0.5.0" />
+ <property name="version"  value="0.5.1" />
  <property name="pharfile" value="${phing.dir}/dist/${phing.project.name}-${version}.phar" />
  <property name="libdir" value="${phing.dir}/lib"/>
 
