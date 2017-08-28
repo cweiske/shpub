@@ -15,7 +15,7 @@ if (!in_array('phar', stream_get_wrappers()) || !class_exists('Phar', false)) {
     exit(255);
 }
 
-//Phar::interceptFileFuncs();
+Phar::mapPhar('shpub.phar');
 set_include_path(
     'phar://' . __FILE__
     . PATH_SEPARATOR . 'phar://' . __FILE__ . '/lib/'
