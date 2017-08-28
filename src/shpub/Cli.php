@@ -31,7 +31,10 @@ class Cli
 
             case 'server':
                 $cmd = new Command_Server($this->cfg);
-                $cmd->run($res->command->options['verbose']);
+                $cmd->run(
+                    $res->command->args['server'],
+                    $res->command->options['verbose']
+                );
                 break;
 
             default:
