@@ -1,3 +1,10 @@
+2017-08-28  Christian Weiske  <cweiske@cweiske.de>
+
+	* Add connection detail mode to "server" command
+	* Fix HTTP response content type header parsing
+	* Fix execution when filename has no ".phar" extension
+	* Version 0.5.0
+
 2017-04-01  Christian Weiske  <cweiske@cweiske.de>
 
 	* New command: (syndication) targets
