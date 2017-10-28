@@ -1,3 +1,8 @@
+2017-10-28  Christian Weiske  <cweiske@cweiske.de>
+
+	* Fix handling of auth URLs with "?" in them
+	* Version 0.5.2
+
 2017-08-28  Christian Weiske  <cweiske@cweiske.de>
 
 	* Fix version output: Show correct version
