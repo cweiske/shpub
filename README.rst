@@ -24,6 +24,7 @@ When using the git version, you need to have the following dependencies
 installed on your system:
 
 - PHP 5.4+
+- PEAR's `Console_CommandLine <http://pear.php.net/package/Console_CommandLine>`_
 - PEAR's `HTTP_Request2 <http://pear.php.net/package/HTTP_Request2>`_
 - PEAR's `MIME_Type <http://pear.php.net/package/MIME_Type>`_
 - PEAR's `NET_URL2 <http://pear.php.net/package/Net_URL2>`_
