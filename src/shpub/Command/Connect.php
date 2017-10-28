@@ -177,11 +177,13 @@ class Command_Connect
 
     protected function getBrowserAuthUrl($host, $user, $redirect_uri, $state, $scope)
     {
+        $sep = strpos($host->endpoints->authorization, '?') === false
+            ? '?' : '&';
         return $host->endpoints->authorization
-            . '?me=' . urlencode($user)
+            . $sep . 'me=' . urlencode($user)
             . '&client_id=' . urlencode(static::$client_id)
             . '&redirect_uri=' . urlencode($redirect_uri)
-            . '&state=' . $state
+            . '&state=' . urlencode($state)
             . '&scope=' . urlencode($scope)
             . '&response_type=code';
     }
