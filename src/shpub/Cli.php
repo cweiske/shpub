@@ -131,6 +131,7 @@ class Cli
         Command_Repost::opts($optParser);
         Command_Rsvp::opts($optParser);
         Command_Bookmark::opts($optParser);
+        Command_X::opts($optParser);
 
         Command_Delete::opts($optParser);
         Command_Undelete::opts($optParser);

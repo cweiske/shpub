@@ -115,6 +115,23 @@ URL image upload::
     http://known.bogo/2016/img-url
 
 
+Custom post types
+=================
+You may create custom post types with the ``x`` command.
+This is useful if your micropub endpoint supports additional types,
+like known's ``annotation`` type (comments and likes for posts).
+
+Create a comment to a known post::
+
+    $ ./bin/shpub.php x annotation\
+        -x url=http://known.bogo/2016/example-domain-1\
+        -x type=reply\
+        -x username=barryf\
+        -x userurl=http://example.org/~barryf\
+        -x userphoto=http://example.org/~barryf/avatar.jpg\
+        -x content="There is a typo in paragraph 1. 'Fou' should be 'Foo'"
+
+
 ===============
 Delete/Undelete
 ===============
