@@ -114,6 +114,12 @@ URL image upload::
     Note created at server
     http://known.bogo/2016/img-url
 
+Load note content from a file::
+
+    $ ./bin/shpub.php note - < /path/to/file.txt
+    Note created at server
+    http://known.bogo/2017/some-note
+
 
 Custom post types
 =================
