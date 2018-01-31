@@ -78,6 +78,7 @@ class Cli
                 }
             }
             $this->cfg->setDebug($opts['debug']);
+            $this->cfg->setDryRun($opts['dryrun']);
 
             return $res;
         } catch (\Exception $exc) {
@@ -115,6 +116,16 @@ class Cli
                 'short_name'  => '-d',
                 'long_name'   => '--debug',
                 'description' => 'Verbose output',
+                'action'      => 'StoreTrue',
+                'default'     => false,
+            )
+        );
+        $optParser->addOption(
+            'dryrun',
+            array(
+                'short_name'  => '-n',
+                'long_name'   => '--dry-run',
+                'description' => 'Do not send modifying HTTP request(s) to the server',
                 'action'      => 'StoreTrue',
                 'default'     => false,
             )

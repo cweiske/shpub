@@ -14,6 +14,8 @@ class Config
 
     public $debug = false;
 
+    public $dryRun = false;
+
     protected function getConfigFilePath()
     {
         if (!isset($_SERVER['HOME'])) {
@@ -91,7 +93,7 @@ class Config
                 return $key;
             }
         }
-        
+
         reset($this->hosts);
         return key($this->hosts);
     }
@@ -120,6 +122,11 @@ class Config
     public function setDebug($debug)
     {
         $this->debug = $debug;
+    }
+
+    public function setDryRun($dryRun)
+    {
+        $this->dryRun = $dryRun;
     }
 }
 ?>

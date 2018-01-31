@@ -93,6 +93,16 @@ class Request
             $cp = new CurlPrinter();
             $cp->show($this->req, $this->uploadsInfo, $this->dedicatedBody);
         }
+
+        if ($this->cfg->dryRun && $this->req->getMethod() != 'GET') {
+            //do not run any modifying queries
+            //fake a successful response
+            $res = new \HTTP_Request2_Response('HTTP/1.1 200 OK', false);
+            $res->parseHeaderLine('Content-type: text/plain');
+            $res->appendBody('Fake --dry-run response');
+            return $res;
+        }
+
         $res = $this->req->send();
 
         if (intval($res->getStatus() / 100) != 2) {
