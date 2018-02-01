@@ -125,7 +125,8 @@ class Cli
             array(
                 'short_name'  => '-n',
                 'long_name'   => '--dry-run',
-                'description' => 'Do not send modifying HTTP request(s) to the server',
+                'description' => 'Do not send modifying HTTP request(s)'
+                    . ' to the server',
                 'action'      => 'StoreTrue',
                 'default'     => false,
             )
