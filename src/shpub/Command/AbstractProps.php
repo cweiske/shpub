@@ -188,6 +188,10 @@ class Command_AbstractProps
         if (count($cmdRes->options['x'])) {
             $postParams = [];
             foreach ($cmdRes->options['x'] as $xproperty) {
+                if ($xproperty == '') {
+                    //happens with "-x foo=bar" instead of "-xfoo=bar"
+                    continue;
+                }
                 list($propkey, $propval) = explode('=', $xproperty, 2);
                 if (!isset($postParams[$propkey])) {
                     $postParams[$propkey] = [];
