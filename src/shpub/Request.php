@@ -99,6 +99,7 @@ class Request
             //fake a successful response
             $res = new \HTTP_Request2_Response('HTTP/1.1 200 OK', false);
             $res->parseHeaderLine('Content-type: text/plain');
+            $res->parseHeaderLine('Location: http://example.org/fake-response');
             $res->appendBody('Fake --dry-run response');
             return $res;
         }
