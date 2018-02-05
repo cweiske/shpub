@@ -18,6 +18,26 @@ See `shpub downloads page <http://cweiske.de/shpub-download.htm>`_
 for all released versions.
 
 
+Installation
+============
+After downloading ``shpub-x.y.z.phar``, you can either use it directly::
+
+    $ php /path/to/shpub-x.y.z.phar --version
+
+or make it more easily accessible::
+
+    $ mv /path/to/shpub-x.y.z.phar /usr/local/bin/shpub
+    $ chmod +x /usr/local/bin/shpub
+    $ shpub --version
+
+You might need ``sudo`` to be able to copy it into the ``/usr/local/bin/``
+directory.
+
+If you're running from the git checkout, start it as follows::
+
+    $ ./bin/shpub.php --version
+
+
 Dependencies
 ============
 When using the git version, you need to have the following dependencies
@@ -35,13 +55,13 @@ Initial setup
 =============
 ::
 
-    $ ./bin/shpub.php connect http://mywebsite
+    $ shpub connect http://mywebsite
 
-Different user::
+In case there are multiple users on the same server::
 
-    $ ./bin/shpub.php connect http://mywebsite http://mywebsite/user
+    $ shpub connect http://sharedwebsite http://shareswebsite/user
 
-If you pass a third parameter, then it will be the name of the connection.
+If you pass a third parameter, then that will be the name of the connection.
 You can select a specific server/connection with ``-s`` on all commands.
 
 
@@ -49,7 +69,7 @@ List configured servers/connections
 ===================================
 ::
 
-    $ ./bin/shpub.php server
+    $ shpub server
     rr
     test
     anoweco.bogo
@@ -71,7 +91,7 @@ shpub has support for the following post types:
 - `repost <http://indieweb.org/repost>`_
 - `rsvp <http://indieweb.org/rsvp>`_
 
-``shpub`` sends data form-encoded by default.
+By default ``shpub`` sends data form-encoded.
 To send JSON requests, use the ``--json`` option.
 
 
@@ -79,7 +99,7 @@ Create a like
 =============
 ::
 
-    $ ./bin/shpub.php like http://example.org/
+    $ shpub like http://example.org/
     Like created at server
     http://anoweco.bogo/comment/23.htm
 
@@ -87,7 +107,7 @@ Create a reply
 ==============
 ::
 
-    $ ./bin/shpub.php reply http://example.org/ "Hey, cool!"
+    $ shpub reply http://example.org/ "Hey, cool!"
     Reply created at server
     http://anoweco.bogo/comment/42.htm
 
@@ -96,13 +116,13 @@ Create a note
 =============
 A normal note::
 
-    $ ./bin/shpub.php note "oh this is cool!"
+    $ shpub note "oh this is cool!"
     Note created at server
     http://known.bogo/2016/oh-this-is-cool.htm
 
 Note with an image::
 
-    $ ./bin/shpub.php note -f image.jpg "this is so cute"
+    $ shpub note -f image.jpg "this is so cute"
     Note created at server
     http://known.bogo/2016/this-is-so-cute
 
@@ -110,13 +130,13 @@ You can use ``-f`` several times to upload multiple files.
 
 URL image upload::
 
-    $ ./bin/shpub.php note -f http://example.org/1.jpg "img url!"
+    $ shpub note -f http://example.org/1.jpg "img url!"
     Note created at server
     http://known.bogo/2016/img-url
 
 Load note content from a file::
 
-    $ ./bin/shpub.php note - < /path/to/file.txt
+    $ shpub note - < /path/to/file.txt
     Note created at server
     http://known.bogo/2017/some-note
 
@@ -125,11 +145,13 @@ Custom post types
 =================
 You may create custom post types with the ``x`` command.
 This is useful if your micropub endpoint supports additional types,
-like known's ``annotation`` type (comments and likes for posts).
+like `known <http://withknown.com/>`__'s
+`"annotation" type <https://cweiske.de/tagebuch/micropub-comments-known.htm>`__
+(comments and likes for posts).
 
 Create a comment to a known post::
 
-    $ ./bin/shpub.php x annotation\
+    $ shpub x annotation\
         -x url=http://known.bogo/2016/example-domain-1\
         -x type=reply\
         -x username=barryf\
@@ -143,11 +165,11 @@ Delete/Undelete
 ===============
 You may delete and restore posts on micropub servers::
 
-    $ ./bin/shpub.php delete http://known.bogo/2016/like
+    $ shpub delete http://known.bogo/2016/like
 
 Restore a deleted post::
 
-    $ ./bin/shpub.php undelete http://known.bogo/2016/like
+    $ shpub undelete http://known.bogo/2016/like
 
 
 =======
@@ -168,33 +190,33 @@ Syndication targets
 ===================
 You may list the syndication targets defined on the server::
 
-    $ ./bin/shpub.php targets
+    $ shpub targets
     IndieNews
      https://news.indieweb.org/en
 
 Then specify it when creating a post::
 
-    $ ./bin/shpub.php article -x mp-syndicate-to=https://news.indieweb.org/en title text
+    $ shpub article -x mp-syndicate-to=https://news.indieweb.org/en title text
 
 ============
 File uploads
 ============
 Most post types allow file uploads. Simply use ``-f``::
 
-    $ ./bin/shpub.php note -f path/to/image.jpg "image test"
+    $ shpub note -f path/to/image.jpg "image test"
     Note created at server
     http://known.bogo/2016/image-test
 
 The media endpoint is used automatically if the micropub endpoint has one.
-To force shpub to directly upload the file and skip the media endpoint,
+To force ``shpub`` to directly upload the file and skip the media endpoint,
 use the ``--direct-upload`` option::
 
-    $ ./bin/shpub.php note --direct-upload -f path/to/image.jpg "direct upload"
+    $ shpub note --direct-upload -f path/to/image.jpg "direct upload"
 
 Use the ``upload`` command to upload files to the media endpoint without
 creating a post::
 
-    $ ./bin/shpub.php upload /path/to/file.jpg /path/to/file2.jpg
+    $ shpub upload /path/to/file.jpg /path/to/file2.jpg
     Uploaded file /path/to/file.jpg
     http://test.bogo/micropub-media-endpoint/1474362040.2941/file.jpg
     Uploaded file /path/to/file2.jpg
@@ -207,10 +229,24 @@ Debugging
 To debug ``shpub`` or your micropub endpoint, use the ``--debug`` option
 to see ``curl`` command equivalents to the shpub HTTP requests::
 
-    $ ./bin/shpub.php -s known -d note "a simple note"
+    $ shpub -s known -d note "a simple note"
     curl -X POST -H 'User-Agent: shpub' -H 'Content-Type: application/x-www-form-urlencoded' -H 'Authorization: Bearer abc' -d 'h=entry' -d 'content=a simple note' 'http://known.bogo/micropub/endpoint'
     Post created at server
     http://known.bogo/2016/a-simple-note
+
+
+See curl commands only
+======================
+You may use the ``--dry-run`` option to make shpub not send any modifying
+HTTP requests (e.g. POST and PUT).
+
+Together with ``--debug`` you can use this to get curl commands without sending
+anything to the server::
+
+    $ shpub --debug --dry-run like example.org
+    curl -X POST -H 'User-Agent: shpub' -H 'Content-Type: application/x-www-form-urlencoded' -H 'Authorization: Bearer cafe' -d 'h=entry' -d 'like-of=http://example.org' 'http://anoweco.bogo/micropub.php'
+    Like created at server
+    http://example.org/fake-response
 
 
 ===========
