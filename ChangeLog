@@ -1,3 +1,9 @@
+2018-02-05  Christian Weiske  <cweiske@cweiske.de>
+
+	* Add "--dry-run" option
+	* Fix space-after-"-x"-option error
+	* Version 0.7.0
+
 2017-11-13  Christian Weiske  <cweiske@cweiske.de>
 
 	* Add "x" command to post custom types
