@@ -250,6 +250,20 @@ anything to the server::
 
 
 ===========
+Development
+===========
+
+Releasing a new version
+=======================
+
+#. Add notes to ``ChangeLog``
+#. Update version number in ``build.xml`` and ``src/shpub/Cli.php``
+#. Run ``phing``
+#. Commit and tag the version
+#. In the ``cweiske.de`` directory, run ``./scripts/update-shpub.sh``
+
+
+===========
 About shpub
 ===========
 shpub's homepage is http://cweiske.de/shpub.htm
