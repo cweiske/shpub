@@ -18,7 +18,9 @@ class Command_Server
     public static function opts(\Console_CommandLine $optParser)
     {
         $cmd = $optParser->addCommand('server');
-        $cmd->description = 'List all connections';
+        $cmd->description = 'List all connections'
+            . "\nPass the connection name to see all details:"
+            . " URL, user, endpoint URLs";
         $cmd->addOption(
             'verbose',
             array(
