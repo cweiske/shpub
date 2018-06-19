@@ -249,6 +249,22 @@ anything to the server::
     http://example.org/fake-response
 
 
+Server information
+==================
+To see which server, user and endpoint URLs ``shpub`` uses, pass the
+server name to the ``server`` command::
+
+    $ shpub server commentpara.de
+    commentpara.de
+     URL:   http://commentpara.de
+     User:  https://commentpara.de/user/3.htm
+     Endpoints:
+      micropub:      https://commentpara.de/micropub.php
+      media:
+      token:         https://commentpara.de/token.php
+      authorization: https://commentpara.de/auth.php
+
+
 ===========
 Development
 ===========
