@@ -279,7 +279,6 @@ class Command_Connect
                     parse_str($parts['query'], $query);
                     if (isset($query['code'])
                         && isset($query['state'])
-                        && isset($query['me'])
                     ) {
                         fwrite($sock, $responseOk);
                         fclose($sock);
