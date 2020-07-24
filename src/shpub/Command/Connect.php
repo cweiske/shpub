@@ -110,6 +110,9 @@ class Command_Connect
         $host->user  = $userUrl;
         $host->token = $accessToken;
 
+        // Now that the token is available, check for a media endpoint
+        $host->loadEndpoints(true);
+
         if ($newKey != '') {
             $hostKey = $newKey;
         } else {

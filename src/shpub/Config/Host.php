@@ -43,11 +43,11 @@ class Config_Host
         $this->endpoints = new Config_Endpoints();
     }
 
-    public function loadEndpoints()
+    public function loadEndpoints($forceReload = false)
     {
         $this->endpoints = new Config_Endpoints();
         $this->endpoints->load($this->server);
-        if ($this->endpoints->incomplete()) {
+        if ($this->endpoints->incomplete() || $forceReload) {
             $this->endpoints->discover($this->server);
             if ($this->token) {
                 $this->endpoints->discoverMedia($this->token);
